@@ -7,7 +7,7 @@ namespace CQELight.Buses
     /// <summary>
     /// Base class for any message publisher.
     /// </summary>
-    public abstract class BasePublisherConfiguration
+    public abstract class BasePublisherConfiguration : BaseBusConfiguration
     {
         #region Properties
 
@@ -26,6 +26,20 @@ namespace CQELight.Buses
         /// <param name="eventsLifetime">Collection of lifetime configuration.</param>
         public BasePublisherConfiguration(
             IEnumerable<EventLifeTimeConfiguration> eventsLifetime)
+            :base ("CQELight_Defaults")
+        {
+            EventsLifetime = eventsLifetime;
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="BasePublisherConfiguration"/>.
+        /// </summary>
+        /// <param name="eventsLifetime">Collection of lifetime configuration.</param>
+        /// <param name="serviceName">Name of the service that use this publisher bus.</param>
+        public BasePublisherConfiguration(
+            IEnumerable<EventLifeTimeConfiguration> eventsLifetime,
+            string serviceName)
+            : base(serviceName)
         {
             EventsLifetime = eventsLifetime;
         }

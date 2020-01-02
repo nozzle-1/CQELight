@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CQELight.Buses.AzureServiceBus
 {
-    class AzureServiceBusBootstrappService : IBootstrapperService
+    class AzureServiceBusBootstrapperService : IBootstrapperService
     {
         public BootstrapperServiceType ServiceType => BootstrapperServiceType.Bus;
 
