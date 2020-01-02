@@ -173,16 +173,20 @@ namespace CQELight.DAL.MongoDb.Adapters
 
         public async Task<int> SaveAsync()
         {
-            try
+            if (session != null) // nothing is writen
             {
-                await session.CommitTransactionAsync().ConfigureAwait(false);
-                return actions;
+                try
+                {
+                    await session.CommitTransactionAsync().ConfigureAwait(false);
+                    return actions;
+                }
+                catch
+                {
+                    await session.AbortTransactionAsync().ConfigureAwait(false);
+                    return 0;
+                }
             }
-            catch
-            {
-                await session.AbortTransactionAsync().ConfigureAwait(false);
-                return 0;
-            }
+            return 0;
         }
 
         #endregion
