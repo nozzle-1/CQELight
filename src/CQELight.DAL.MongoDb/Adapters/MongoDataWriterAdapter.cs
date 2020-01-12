@@ -5,12 +5,8 @@ using CQELight.DAL.MongoDb.Mapping;
 using CQELight.Tools;
 using CQELight.Tools.Extensions;
 using MongoDB.Driver;
-using MongoDB.Driver.Core.Operations;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

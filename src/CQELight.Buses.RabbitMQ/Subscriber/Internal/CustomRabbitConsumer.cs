@@ -1,8 +1,5 @@
 ﻿using CQELight.Buses.RabbitMQ.Network;
 using RabbitMQ.Client.Events;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Buses.RabbitMQ.Subscriber.Internal
 {

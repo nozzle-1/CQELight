@@ -5,7 +5,6 @@ using Geneao.Events;
 using Geneao.Identity;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Geneao.Domain
 {

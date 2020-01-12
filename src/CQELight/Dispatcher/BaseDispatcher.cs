@@ -1,6 +1,5 @@
 ﻿using CQELight.Abstractions.CQS.Interfaces;
 using CQELight.Abstractions.DDD;
-using CQELight.Abstractions.Dispatcher;
 using CQELight.Abstractions.Dispatcher.Interfaces;
 using CQELight.Abstractions.Events.Interfaces;
 using CQELight.Abstractions.IoC.Interfaces;
@@ -9,16 +8,12 @@ using CQELight.Dispatcher.Configuration.Internal;
 using CQELight.IoC;
 using CQELight.Tools;
 using CQELight.Tools.Extensions;
-using Force.DeepCloner;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace CQELight.Dispatcher
@@ -218,7 +213,7 @@ namespace CQELight.Dispatcher
             return (eventType, eventConfiguration);
         }
 
-        private async Task PrivatePublishEventAsync(IDomainEvent @event, IEventContext context, Type eventType, Configuration.Internal.EventDispatchConfiguration eventConfiguration)
+        private async Task PrivatePublishEventAsync(IDomainEvent @event, IEventContext context, Type eventType, EventDispatchConfiguration eventConfiguration)
         {
             if (eventConfiguration != null)
             {

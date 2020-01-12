@@ -1,9 +1,5 @@
-﻿using CQELight.Abstractions.CQS.Interfaces;
-using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Events.Serializers;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Buses.RabbitMQ.Network
 {

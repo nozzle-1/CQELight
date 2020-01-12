@@ -1,9 +1,7 @@
 ﻿using CQELight.DAL.Attributes;
 using CQELight.DAL.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace CQELight.DAL.Common
 {

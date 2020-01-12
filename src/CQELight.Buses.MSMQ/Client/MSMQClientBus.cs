@@ -36,7 +36,7 @@ namespace CQELight.Buses.MSMQ.Client
                 throw new ArgumentNullException(nameof(emiter));
             }
             _configuration = configuration ?? MSMQClientBusConfiguration.Default;
-            _serializer = serializer ?? throw new System.ArgumentNullException(nameof(serializer));
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             _emiter = emiter;
         }
 

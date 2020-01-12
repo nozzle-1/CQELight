@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.IoC.Exceptions
 {
     /// <summary>
     /// A generic exception that indicates an IoC resolution exception. 
     /// </summary>
-    public class IoCResolutionException : System.Exception
+    public class IoCResolutionException : Exception
     {
      
         #region Ctor

@@ -1,9 +1,7 @@
 ﻿using CQELight;
 using CQELight.Dispatcher;
 using CQELight.IoC;
-using CQELight.EventStore.EFCore.Common;
 using Geneao.Commands;
-using Geneao.Data;
 using Geneao.Queries;
 using Microsoft.EntityFrameworkCore;
 using System;

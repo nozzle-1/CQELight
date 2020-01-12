@@ -1,11 +1,7 @@
 using CQELight.TestFramework;
-using System;
 using Xunit;
-using CQELight.IoC.Autofac;
 using Autofac;
 using FluentAssertions;
-using CQELight.Bootstrapping.Notifications;
-using System.Collections.Generic;
 using CQELight.Abstractions.IoC.Interfaces;
 
 namespace CQELight.IoC.Autofac.Integration.Tests

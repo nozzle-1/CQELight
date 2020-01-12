@@ -1,7 +1,5 @@
 ﻿using CQELight.Abstractions.Events;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight_Benchmarks.Models
 {

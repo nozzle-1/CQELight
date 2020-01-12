@@ -5,7 +5,6 @@ using CQELight.Tools.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CQELight.DAL
@@ -43,7 +42,7 @@ namespace CQELight.DAL
             Expression<Func<T, bool>> filter = null,
             Expression<Func<T, object>> orderBy = null,
             bool includeDeleted = false) where T : class
-            => dataReaderAdapter.GetAsync<T>(filter, orderBy, includeDeleted);
+            => dataReaderAdapter.GetAsync(filter, orderBy, includeDeleted);
 
         public virtual Task<T> GetByIdAsync<T>(object value) where T : class
             => dataReaderAdapter.GetByIdAsync<T>(value);

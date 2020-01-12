@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace CQELight_ASPNETCore3
+﻿namespace CQELight_ASPNETCore3
 {
     public interface IUselessService
     {

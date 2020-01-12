@@ -1,7 +1,4 @@
 ﻿using CQELight.TestFramework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using CQELight.Tools.Extensions;
 using Xunit;
 using FluentAssertions;

@@ -1,8 +1,6 @@
 ﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.EventStore.MongoDb.Common
 {

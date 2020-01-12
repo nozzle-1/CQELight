@@ -1,10 +1,8 @@
-﻿using CQELight.Abstractions.CQS;
-using CQELight.Abstractions.DDD;
+﻿using CQELight.Abstractions.DDD;
 using CQELight.TestFramework;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 

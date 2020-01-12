@@ -1,8 +1,6 @@
 ﻿using CQELight.Abstractions.CQS.Interfaces;
 using Geneao.Identity;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Geneao.Commands
 {

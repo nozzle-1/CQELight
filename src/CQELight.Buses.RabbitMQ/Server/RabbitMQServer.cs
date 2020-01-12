@@ -1,6 +1,5 @@
 ﻿using CQELight.Abstractions.Events.Interfaces;
 using CQELight.Buses.InMemory.Events;
-using CQELight.Buses.RabbitMQ.Extensions;
 using CQELight.Tools;
 using CQELight.Tools.Extensions;
 using Microsoft.Extensions.Logging;

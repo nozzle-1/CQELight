@@ -5,11 +5,8 @@ using CQELight.Abstractions.IoC.Interfaces;
 using CQELight.IoC.Attributes;
 using CQELight.Tools;
 using CQELight.Tools.Extensions;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using A = Autofac;
 
 namespace CQELight.IoC.Autofac

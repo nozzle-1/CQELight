@@ -3,10 +3,6 @@ using CQELight.Buses.AzureServiceBus.Client;
 using CQELight.IoC;
 using Microsoft.Azure.ServiceBus;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace CQELight
 {

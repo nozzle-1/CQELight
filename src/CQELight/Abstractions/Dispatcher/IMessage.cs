@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.Abstractions.Dispatcher
+﻿namespace CQELight.Abstractions.Dispatcher
 {
     /// <summary>
     /// Base contract interface for standard message in system.

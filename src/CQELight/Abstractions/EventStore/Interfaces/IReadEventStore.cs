@@ -2,7 +2,6 @@
 using CQELight.Abstractions.Events.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Abstractions.EventStore.Interfaces
 {

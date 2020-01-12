@@ -4,8 +4,6 @@ using CQELight.Abstractions.IoC.Interfaces;
 using Geneao.Data;
 using Geneao.Events;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Geneao.Handlers.Events

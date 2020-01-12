@@ -2,8 +2,6 @@
 using CQELight.EventStore.EFCore.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.EventStore.EFCore
 {

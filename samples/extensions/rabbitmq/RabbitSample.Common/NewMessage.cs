@@ -1,5 +1,4 @@
 ﻿using CQELight.Abstractions.Events;
-using System;
 
 namespace RabbitSample.Common
 {

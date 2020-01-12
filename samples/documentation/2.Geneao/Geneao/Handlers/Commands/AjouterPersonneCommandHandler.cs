@@ -2,13 +2,8 @@
 using CQELight.Abstractions.DDD;
 using CQELight.Abstractions.EventStore.Interfaces;
 using CQELight.Abstractions.IoC.Interfaces;
-using CQELight.Dispatcher;
 using Geneao.Commands;
 using Geneao.Domain;
-using Geneao.Identity;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Geneao.Handlers.Commands

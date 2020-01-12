@@ -1,17 +1,11 @@
 ﻿using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Abstractions.EventStore.Interfaces;
 using CQELight.Dispatcher;
-using CQELight.EventStore.MongoDb.Common;
 using CQELight.IoC;
-using CQELight.Tools.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 using MongoDB.Driver;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace CQELight.EventStore.MongoDb

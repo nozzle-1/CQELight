@@ -1,10 +1,7 @@
 ﻿using CQELight.DAL.Attributes;
 using CQELight.Tools.Serialisation;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace CQELight.EventStore.EFCore.Serialisation
 {

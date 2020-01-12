@@ -1,9 +1,6 @@
 ﻿using CQELight.Implementations.IoC;
 using CQELight.Tools.Extensions;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.IoC.Microsoft.Extensions.DependencyInjection
 {

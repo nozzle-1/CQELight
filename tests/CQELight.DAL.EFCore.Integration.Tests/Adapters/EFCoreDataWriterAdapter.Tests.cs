@@ -3,9 +3,7 @@ using CQELight.TestFramework;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -342,7 +340,7 @@ namespace CQELight.DAL.EFCore.Integration.Tests.Adapters
                 {
                     var entity = new TestDbContext().Set<WebSite>().FirstOrDefault();
                     entity.Should().NotBeNull();
-                    adapater.MarkForDelete<WebSite>(entity);
+                    adapater.MarkForDelete(entity);
                     await adapater.SaveAsync().ConfigureAwait(false);
                 }
                 using (var ctx = new TestDbContext())

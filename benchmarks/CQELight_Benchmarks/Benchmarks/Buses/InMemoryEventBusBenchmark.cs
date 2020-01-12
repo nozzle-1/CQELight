@@ -1,12 +1,9 @@
 ﻿using BenchmarkDotNet.Attributes;
 using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Buses.InMemory.Commands;
 using CQELight.Buses.InMemory.Events;
 using CQELight_Benchmarks.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CQELight_Benchmarks.Benchmarks

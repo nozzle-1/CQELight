@@ -1,8 +1,5 @@
 ﻿using CQELight.Tools;
-using System;
-using System.Collections.Generic;
 using CQELight.TestFramework.IoC;
-using System.Text;
 using Moq;
 using CQELight.Abstractions.Dispatcher.Interfaces;
 using CQELight.Abstractions.EventStore.Interfaces;

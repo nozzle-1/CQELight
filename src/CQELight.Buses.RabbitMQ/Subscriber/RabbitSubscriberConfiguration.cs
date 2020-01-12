@@ -3,8 +3,6 @@ using CQELight.Abstractions.Events.Interfaces;
 using CQELight.Buses.RabbitMQ.Common;
 using CQELight.Buses.RabbitMQ.Network;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Buses.RabbitMQ.Subscriber
 {

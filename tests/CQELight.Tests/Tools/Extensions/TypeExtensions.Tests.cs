@@ -2,9 +2,7 @@
 using CQELight.Tools.Extensions;
 using FluentAssertions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace CQELight.Tools.Tests.Extensions

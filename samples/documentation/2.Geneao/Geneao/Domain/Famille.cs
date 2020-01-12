@@ -1,15 +1,11 @@
 ﻿using CQELight.Abstractions.DDD;
 using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Abstractions.EventStore;
 using CQELight.Abstractions.EventStore.Interfaces;
-using Geneao.Data;
-using Geneao.Data.Models;
 using Geneao.Events;
 using Geneao.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Geneao.Domain
 {

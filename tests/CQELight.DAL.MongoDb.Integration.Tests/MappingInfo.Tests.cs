@@ -1,10 +1,7 @@
 ﻿using CQELight.DAL.MongoDb.Mapping;
 using CQELight.TestFramework;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace CQELight.DAL.MongoDb.Integration.Tests

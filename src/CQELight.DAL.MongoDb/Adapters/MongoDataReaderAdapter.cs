@@ -1,5 +1,4 @@
-﻿using CQELight.DAL.Attributes;
-using CQELight.DAL.Common;
+﻿using CQELight.DAL.Common;
 using CQELight.DAL.MongoDb.Mapping;
 using CQELight.Tools;
 using CQELight.Tools.Extensions;
@@ -8,8 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using CQELight.DAL.MongoDb.Extensions;
 using CQELight.Abstractions.DAL.Interfaces;

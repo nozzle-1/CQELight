@@ -1,10 +1,8 @@
 ﻿using CQELight.Abstractions.IoC.Interfaces;
 using CQELight.Bootstrapping.Notifications;
 using CQELight.Tools;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CQELight.Bootstrapping
 {

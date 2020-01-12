@@ -1,9 +1,6 @@
 ﻿using CQELight.Abstractions.CQS.Interfaces;
 using CQELight.Abstractions.DDD;
 using CQELight.Dispatcher;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using XamarinHelloWorld.Events;
 

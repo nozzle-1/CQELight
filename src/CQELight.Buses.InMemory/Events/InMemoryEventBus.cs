@@ -1,21 +1,16 @@
 ﻿using CQELight.Abstractions.DDD;
-using CQELight.Abstractions.Dispatcher.Interfaces;
 using CQELight.Abstractions.Events.Interfaces;
 using CQELight.Abstractions.IoC.Interfaces;
 using CQELight.Abstractions.Saga.Interfaces;
 using CQELight.Dispatcher;
-using CQELight.IoC;
 using CQELight.IoC.Exceptions;
 using CQELight.Tools;
 using CQELight.Tools.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace CQELight.Buses.InMemory.Events

@@ -7,7 +7,6 @@ using CQELight.Abstractions.Dispatcher;
 using System;
 using System.Linq;
 using CQELight.Tools;
-using CQELight.Buses.RabbitMQ.Extensions;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using CQELight.Abstractions.DDD;
@@ -50,7 +49,7 @@ namespace CQELight.Buses.RabbitMQ.Client
             }
             _logger = loggerFactory.CreateLogger<RabbitMQEventBus>();
             _configuration = configuration ?? RabbitPublisherBusConfiguration .Default;
-            _serializer = serializer ?? throw new System.ArgumentNullException(nameof(serializer));
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
         }
 
         #endregion

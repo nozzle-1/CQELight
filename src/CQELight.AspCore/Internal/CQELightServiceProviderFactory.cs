@@ -2,8 +2,6 @@
 using CQELight.IoC;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.AspCore.Internal
 {

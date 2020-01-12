@@ -2,10 +2,8 @@
 using CQELight.Abstractions.Events.Interfaces;
 using CQELight.Abstractions.IoC.Interfaces;
 using Geneao.Data;
-using Geneao.Domain;
 using Geneao.Events;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Geneao.Handlers.Events

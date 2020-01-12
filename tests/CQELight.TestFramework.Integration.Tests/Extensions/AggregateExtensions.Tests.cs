@@ -3,8 +3,6 @@ using CQELight.Abstractions.Events;
 using CQELight.TestFramework.Extensions;
 using FluentAssertions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace CQELight.TestFramework.Integration.Tests.Extensions

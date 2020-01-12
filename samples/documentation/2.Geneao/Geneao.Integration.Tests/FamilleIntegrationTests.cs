@@ -3,13 +3,9 @@ using CQELight.Dispatcher;
 using CQELight.TestFramework;
 using FluentAssertions;
 using Geneao.Commands;
-using Geneao.Domain;
 using Geneao.Events;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 

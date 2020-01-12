@@ -42,7 +42,7 @@ namespace CQELight.Integration.Tests.Dispatcher
 
             bool coreDispatcherCalledWithoutSecurityCritical = false;
 
-            var d = new BaseDispatcher(new CQELight.Dispatcher.Configuration.DispatcherConfiguration(false), fakeScopeFactory);
+            var d = new BaseDispatcher(new DispatcherConfiguration(false), fakeScopeFactory);
 
             var evt = new TestEvent();
 
@@ -204,7 +204,7 @@ namespace CQELight.Integration.Tests.Dispatcher
             }));
 
             bool coreDispatcherCalledWithoutSecurityCritical = false;
-            var d = new BaseDispatcher(new CQELight.Dispatcher.Configuration.DispatcherConfiguration(false), fakeScopeFactory);
+            var d = new BaseDispatcher(new DispatcherConfiguration(false), fakeScopeFactory);
 
             var command = new TestCommand();
             CoreDispatcher.OnCommandDispatched += (c) =>

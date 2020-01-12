@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.Buses.AzureServiceBus
+﻿namespace CQELight.Buses.AzureServiceBus
 {
     internal static class Consts
     {

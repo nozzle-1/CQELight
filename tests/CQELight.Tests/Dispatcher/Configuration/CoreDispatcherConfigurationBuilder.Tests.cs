@@ -7,10 +7,7 @@ using CQELight.Events.Serializers;
 using CQELight.TestFramework;
 using CQELight.Tools;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace CQELight.Tests.Dispatcher.Configuration

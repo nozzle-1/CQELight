@@ -3,10 +3,8 @@ using CQELight.Buses.RabbitMQ.Publisher;
 using CQELight.Buses.RabbitMQ.Subscriber;
 using CQELight.Tools.Extensions;
 using RabbitMQ.Client;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CQELight.Buses.RabbitMQ.Common
 {

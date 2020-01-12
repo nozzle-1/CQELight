@@ -1,6 +1,5 @@
 using CQELight.TestFramework.Extensions;
 using FluentAssertions;
-using System;
 using Xunit;
 
 namespace CQELight.TestFramework.MVVM.Tests.Extensions

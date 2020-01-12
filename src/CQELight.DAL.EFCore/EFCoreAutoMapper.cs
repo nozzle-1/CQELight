@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using CM = System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using System.Text;
 using System.Linq;
 
 namespace CQELight.DAL.EFCore

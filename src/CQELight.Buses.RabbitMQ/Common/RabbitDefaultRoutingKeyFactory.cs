@@ -1,7 +1,4 @@
 ﻿using CQELight.Buses.RabbitMQ.Common.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Buses.RabbitMQ.Common
 {
