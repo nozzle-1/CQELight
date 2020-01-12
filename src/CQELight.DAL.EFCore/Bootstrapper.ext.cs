@@ -44,6 +44,8 @@ namespace CQELight
                      {
                          if (ctx.IsServiceRegistered(BootstrapperServiceType.IoC))
                          {
+                             bootstrapper.AddIoCRegistration(new InstanceTypeRegistration(dbContext, dbContext.GetType()));
+
                              var entities = ReflectionTools.GetAllTypes()
                                 .Where(t => typeof(IPersistableEntity).IsAssignableFrom(t)).ToList();
                              foreach (var item in entities)
@@ -52,9 +54,6 @@ namespace CQELight
                                  var dataReaderRepoType = typeof(IDataReaderRepository<>).MakeGenericType(item);
                                  var databaseRepoType = typeof(IDatabaseRepository<>).MakeGenericType(item);
                                  var dataUpdateRepoType = typeof(IDataUpdateRepository<>).MakeGenericType(item);
-
-                                 bootstrapper.AddIoCRegistration(new InstanceTypeRegistration(dbContext, dbContext.GetType()));
-
                                  bootstrapper
                                      .AddIoCRegistration(new FactoryRegistration(() => efRepoType.CreateInstance(dbContext),
                                          efRepoType, dataUpdateRepoType, databaseRepoType, dataReaderRepoType));
