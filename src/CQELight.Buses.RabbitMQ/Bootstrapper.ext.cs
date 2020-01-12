@@ -1,7 +1,5 @@
 ﻿using CQELight.Abstractions.Events.Interfaces;
 using CQELight.Abstractions.IoC.Interfaces;
-using CQELight.Buses.InMemory.Commands;
-using CQELight.Buses.InMemory.Events;
 using CQELight.Buses.RabbitMQ;
 using CQELight.Buses.RabbitMQ.Client;
 using CQELight.Buses.RabbitMQ.Common;

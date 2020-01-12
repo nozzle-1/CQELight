@@ -1,11 +1,7 @@
 ﻿using Autofac;
 using CQELight;
 using CQELight.Buses.RabbitMQ.Network;
-using CQELight.Dispatcher;
-using CQELight.IoC;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
-using Microsoft.Extensions.Options;
 using RabbitSample.Common;
 using System;
 

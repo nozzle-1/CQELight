@@ -1,9 +1,6 @@
 ﻿using CQELight.Abstractions.Dispatcher.Interfaces;
 using CQELight.Abstractions.EventStore.Interfaces;
 using CQELight.Abstractions.IoC.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Tools
 {

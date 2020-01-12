@@ -26,7 +26,7 @@ namespace CQELight.Buses.AzureServiceBus.Client
         {
             if (string.IsNullOrWhiteSpace(connectionString))
             {
-                throw new System.ArgumentException("AzureServiceBusClientConfiguration.ctor() : Connection string shouldn't be null or whitespace",
+                throw new ArgumentException("AzureServiceBusClientConfiguration.ctor() : Connection string shouldn't be null or whitespace",
                     nameof(connectionString));
             }
 

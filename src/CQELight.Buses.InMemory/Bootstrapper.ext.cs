@@ -4,14 +4,12 @@ using CQELight.Bootstrapping.Notifications;
 using CQELight.Buses.InMemory;
 using CQELight.Buses.InMemory.Commands;
 using CQELight.Buses.InMemory.Events;
-using CQELight.Dispatcher;
 using CQELight.IoC;
 using CQELight.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace CQELight
 {

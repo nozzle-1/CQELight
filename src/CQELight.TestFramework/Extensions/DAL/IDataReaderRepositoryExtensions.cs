@@ -4,12 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace CQELight.TestFramework.Extensions.DAL
 {
     /// <summary>
-    /// Collection of extension methods upon <see cref="Abstractions.DAL.Interfaces.IDataReaderRepository"/>.
+    /// Collection of extension methods upon <see cref="IDataReaderRepository"/>.
     /// </summary>
     public static class IDataReaderRepositoryExtensions
     {

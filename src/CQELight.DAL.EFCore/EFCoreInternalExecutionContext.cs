@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.DAL.EFCore
+﻿namespace CQELight.DAL.EFCore
 {
     internal static class EFCoreInternalExecutionContext
     {

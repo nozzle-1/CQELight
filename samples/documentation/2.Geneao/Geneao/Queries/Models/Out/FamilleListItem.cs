@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Geneao.Queries.Models.Out
+﻿namespace Geneao.Queries.Models.Out
 {
     public class FamilleListItem
     {

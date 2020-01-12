@@ -1,5 +1,4 @@
 ﻿using CQELight.Abstractions.DAL.Interfaces;
-using CQELight.DAL.Common;
 using CQELight.DAL.EFCore;
 using CQELight.DAL.EFCore.Adapters;
 using CQELight.DAL.Interfaces;
@@ -9,9 +8,7 @@ using CQELight.Tools.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace CQELight
 {

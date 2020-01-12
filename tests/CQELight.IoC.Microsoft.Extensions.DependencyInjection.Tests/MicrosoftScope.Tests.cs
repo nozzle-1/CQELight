@@ -1,8 +1,6 @@
 ﻿using CQELight.TestFramework;
-using MS = Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using FluentAssertions;
@@ -36,7 +34,7 @@ namespace CQELight.IoC.Microsoft.Extensions.DependencyInjection.Tests
         }
 
         private Bootstrapper bootstrapper;
-        private IEnumerable<BootstrapperNotification> Bootstrapp(MS.IServiceCollection services)
+        private IEnumerable<BootstrapperNotification> Bootstrapp(IServiceCollection services)
             => bootstrapper.UseMicrosoftDependencyInjection(services).Bootstrapp();
 
         #endregion

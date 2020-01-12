@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.Abstractions.DDD
+﻿namespace CQELight.Abstractions.DDD
 {
     /// <summary>
     /// Definition of a Value objecT.

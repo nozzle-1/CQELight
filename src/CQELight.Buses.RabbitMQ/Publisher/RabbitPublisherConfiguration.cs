@@ -3,10 +3,8 @@ using CQELight.Buses.RabbitMQ.Common;
 using CQELight.Buses.RabbitMQ.Common.Abstractions;
 using CQELight.Buses.RabbitMQ.Network;
 using CQELight.Events.Serializers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CQELight.Buses.RabbitMQ.Publisher
 {

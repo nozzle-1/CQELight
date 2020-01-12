@@ -2,8 +2,6 @@
 using CQELight.Abstractions.Events.Interfaces;
 using RabbitSample.Common;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RabbitSample.Server

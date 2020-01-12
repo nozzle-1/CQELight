@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using CQELight;
-using System.Text;
 
 namespace CQELight.EventStore.MongoDb
 {

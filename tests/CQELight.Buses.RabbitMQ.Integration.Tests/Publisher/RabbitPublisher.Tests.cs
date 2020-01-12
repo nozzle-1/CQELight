@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 using Moq;
 using RabbitMQ.Client;
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;

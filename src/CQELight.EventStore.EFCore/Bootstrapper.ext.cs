@@ -1,13 +1,8 @@
-﻿using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Abstractions.EventStore.Interfaces;
+﻿using CQELight.Abstractions.EventStore.Interfaces;
 using CQELight.EventStore.EFCore;
 using CQELight.EventStore.EFCore.Common;
 using CQELight.IoC;
-using CQELight.Tools.Extensions;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight
 {

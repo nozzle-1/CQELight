@@ -1,10 +1,7 @@
 ﻿using CQELight.Abstractions.DAL.Interfaces;
 using CQELight.DAL.Common;
 using CQELight.Tools;
-using CQELight.Tools.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CQELight.DAL.EFCore.Adapters

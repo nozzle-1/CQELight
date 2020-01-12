@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.MVVM.Interfaces
+﻿namespace CQELight.MVVM.Interfaces
 {
     /// <summary>
     /// Contract interface for managing view visibility.

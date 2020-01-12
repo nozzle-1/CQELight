@@ -1,8 +1,5 @@
 ﻿using CQELight.Buses.RabbitMQ.Common;
 using RabbitMQ.Client;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RabbitSample.Common
 {

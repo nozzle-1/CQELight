@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CQELight.Abstractions.Saga.Interfaces
@@ -15,6 +13,6 @@ namespace CQELight.Abstractions.Saga.Interfaces
         /// </summary>
         /// <param name="saga">Saga to persist.</param>
         /// <param name="onErrorCallback">Callback method to fire if any persistence exception occures.</param>
-        Task PersistSagaAsync(T saga, Action<T, System.Exception> onErrorCallback);
+        Task PersistSagaAsync(T saga, Action<T, Exception> onErrorCallback);
     }
 }

@@ -1,8 +1,5 @@
 ﻿using CQELight.Abstractions.DDD;
-using CQELight.Abstractions.EventStore.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.EventStore.MongoDb.Models
 {

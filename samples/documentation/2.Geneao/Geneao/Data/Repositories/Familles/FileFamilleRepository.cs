@@ -1,5 +1,4 @@
 ﻿using CQELight.Abstractions.IoC.Interfaces;
-using CQELight.DAL.Interfaces;
 using Geneao.Data.Models;
 using Geneao.Identity;
 using Newtonsoft.Json;
@@ -8,7 +7,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Geneao.Data

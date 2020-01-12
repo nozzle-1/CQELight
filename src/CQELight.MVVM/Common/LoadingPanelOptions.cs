@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.MVVM.Common
+﻿namespace CQELight.MVVM.Common
 {
     /// <summary>
     /// Options for loading panel displayer.

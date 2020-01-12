@@ -1,14 +1,9 @@
-﻿using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Abstractions.EventStore.Interfaces;
+﻿using CQELight.Abstractions.EventStore.Interfaces;
 using CQELight.EventStore.MongoDb;
 using CQELight.EventStore.MongoDb.Common;
 using CQELight.IoC;
-using CQELight.Tools.Extensions;
 using MongoDB.Bson.Serialization;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CQELight
 {

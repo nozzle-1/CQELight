@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.Buses.RabbitMQ
+﻿namespace CQELight.Buses.RabbitMQ
 {
     internal static class Consts
     {

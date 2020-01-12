@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.DAL.Interfaces
+﻿namespace CQELight.DAL.Interfaces
 {
     /// <summary>
     /// Base common interface for all kind of persitable entities.

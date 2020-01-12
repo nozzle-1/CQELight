@@ -1,10 +1,4 @@
-﻿using CQELight.Abstractions.CQS.Interfaces;
-using CQELight.Abstractions.Events.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.Buses.RabbitMQ.Common.Abstractions
+﻿namespace CQELight.Buses.RabbitMQ.Common.Abstractions
 {
     /// <summary>
     /// Contract interface for routing key factory implementation.

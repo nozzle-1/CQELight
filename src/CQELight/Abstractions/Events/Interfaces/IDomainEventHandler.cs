@@ -1,7 +1,4 @@
 ﻿using CQELight.Abstractions.DDD;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CQELight.Abstractions.Events.Interfaces

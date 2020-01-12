@@ -1,8 +1,4 @@
-﻿using CQELight.DAL.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CQELight.Abstractions.DAL.Interfaces
 {

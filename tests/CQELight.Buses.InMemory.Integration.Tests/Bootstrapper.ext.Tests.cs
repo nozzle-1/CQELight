@@ -7,10 +7,7 @@ using CQELight.Buses.InMemory.Commands;
 using CQELight.Buses.InMemory.Events;
 using CQELight.TestFramework;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 

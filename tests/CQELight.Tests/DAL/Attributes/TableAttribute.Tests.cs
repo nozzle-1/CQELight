@@ -1,9 +1,6 @@
 ﻿using CQELight.DAL.Attributes;
 using CQELight.TestFramework;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace CQELight.Tests.DAL.Attributes

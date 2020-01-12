@@ -5,14 +5,12 @@ using CQELight.Abstractions.IoC.Interfaces;
 using CQELight.Dispatcher.Configuration.Commands;
 using CQELight.Dispatcher.Configuration.Events;
 using CQELight.Dispatcher.Configuration.Internal;
-using CQELight.IoC;
 using CQELight.Tools;
 using CQELight.Tools.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace CQELight.Dispatcher.Configuration
 {

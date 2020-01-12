@@ -1,14 +1,11 @@
 ﻿using BenchmarkDotNet.Attributes;
 using CQELight.Abstractions.Events.Interfaces;
 using CQELight.Buses.RabbitMQ.Client;
-using CQELight.Buses.RabbitMQ.Publisher;
 using CQELight.Events.Serializers;
 using CQELight_Benchmarks.Models;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CQELight_Benchmarks.Benchmarks.Buses

@@ -1,9 +1,7 @@
 ﻿using CQELight.Dispatcher;
 using CQELight.IoC;
 using CQELight.TestFramework.IoC;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Reflection;
 
 namespace CQELight.TestFramework
 {

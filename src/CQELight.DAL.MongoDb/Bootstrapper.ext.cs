@@ -8,9 +8,7 @@ using CQELight.Tools.Extensions;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CQELight
 {

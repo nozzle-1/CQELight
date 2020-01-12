@@ -1,13 +1,11 @@
 ﻿using CQELight.Abstractions.DDD;
 using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Abstractions.EventStore;
 using CQELight.Abstractions.EventStore.Interfaces;
 using CQELight.Extensions;
 using CQELight.TestFramework;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace CQELight.Tests.Extensions

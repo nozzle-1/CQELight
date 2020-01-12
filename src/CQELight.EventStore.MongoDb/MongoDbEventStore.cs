@@ -1,7 +1,6 @@
 ﻿using CQELight.Abstractions.DDD;
 using CQELight.Abstractions.Events;
 using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Abstractions.EventStore;
 using CQELight.Abstractions.EventStore.Interfaces;
 using CQELight.EventStore.Attributes;
 using CQELight.EventStore.MongoDb.Models;
@@ -12,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CQELight.EventStore.MongoDb

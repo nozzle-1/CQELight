@@ -1,8 +1,4 @@
-﻿using CQELight.Abstractions.DDD;
-using CQELight.Abstractions.EventStore.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace CQELight.EventStore.EFCore.Models
 {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Buses.AzureServiceBus.Server
 {
@@ -31,7 +29,7 @@ namespace CQELight.Buses.AzureServiceBus.Server
         {
             if (string.IsNullOrWhiteSpace(connectionString))
             {
-                throw new System.ArgumentException("AzureServiceBusClientConfiguration.ctor() : Connection string shouldn't be null or whitespace",
+                throw new ArgumentException("AzureServiceBusClientConfiguration.ctor() : Connection string shouldn't be null or whitespace",
                     nameof(connectionString));
             }
             QueueConfiguration = queueConfiguration ?? throw new ArgumentNullException(nameof(queueConfiguration));

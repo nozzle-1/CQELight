@@ -2,12 +2,9 @@
 using CQELight.Abstractions.Events.Interfaces;
 using CQELight.Abstractions.IoC.Interfaces;
 using CQELight.Dispatcher;
-using CQELight.IoC;
 using CQELight.MVVM.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using W = System.Windows.Input;
 

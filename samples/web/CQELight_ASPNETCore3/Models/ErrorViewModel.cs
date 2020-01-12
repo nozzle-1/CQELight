@@ -1,5 +1,3 @@
-using System;
-
 namespace CQELight_ASPNETCore3.Models
 {
     public class ErrorViewModel

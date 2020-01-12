@@ -3,7 +3,6 @@ using CQELight.DAL.Common;
 using CQELight.DAL.Interfaces;
 using CQELight.DAL.MongoDb.Mapping;
 using CQELight.Tools.Extensions;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Concurrent;
