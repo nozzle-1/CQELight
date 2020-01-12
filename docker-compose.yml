@@ -25,7 +25,26 @@ services:
       - '27016:27017'
     networks:
       - cqenet
-      
+  mongo2:
+    image: mongo    
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: 'hts-test'
+      MONGO_INITDB_ROOT_PASSWORD: 'passw0rd'
+    ports:
+      - '27015:27017'
+    networks:
+      - cqenet
+  mongo3:
+    image: mongo    
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: 'hts-test'
+      MONGO_INITDB_ROOT_PASSWORD: 'passw0rd'
+    ports:
+      - '27014:27017'
+    networks:
+      - cqenet
 # cqelight:
 #   build: .
 #   depends_on:

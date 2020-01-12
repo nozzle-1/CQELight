@@ -41,6 +41,10 @@ namespace CQELight.DAL.MongoDb.Adapters
                         session.StartTransaction();
                     }
                 }
+                catch
+                {
+                    throw;
+                }
                 finally
                 {
                     sessionLock.Release();

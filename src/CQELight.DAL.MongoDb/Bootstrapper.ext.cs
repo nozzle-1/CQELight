@@ -7,6 +7,7 @@ using CQELight.Tools;
 using CQELight.Tools.Extensions;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace CQELight
                         BsonSerializer.RegisterSerializer(typeof(Guid), new GuidSerializer());
                     }
                     MongoDbContext.DatabaseName = options.DatabaseName;
-                    MongoDbContext.MongoClient = new MongoDB.Driver.MongoClient(options.Url);
+                    MongoDbContext.MongoClient = new MongoClient(options.Url);
 
                     var pack = new ConventionPack();
                     pack.Add(new IgnoreExtraElementsConvention(true));

@@ -15,7 +15,7 @@ namespace CQELight.DAL.MongoDb.Integration.Tests
     {
         internal static bool s_globalInit;
     }
-    internal class WebSite : PersistableEntity
+    public class WebSite : PersistableEntity
     {
         [Index(true), Column("URL"), Required]
         public virtual string Url { get; set; }
@@ -31,14 +31,14 @@ namespace CQELight.DAL.MongoDb.Integration.Tests
     }
 
     [ComposedKey(nameof(Country), nameof(DataCenter))]
-    internal class AzureLocation : ComposedKeyPersistableEntity
+    public class AzureLocation : ComposedKeyPersistableEntity
     {
         public string Country { get; set; }
         public string DataCenter { get; set; }
     }
 
     [Table("Hyperlinks")]
-    internal class Hyperlink : CustomKeyPersistableEntity
+    public class Hyperlink : CustomKeyPersistableEntity
     {
         [PrimaryKey("Hyperlink"), MaxLength(1024)]
         public string Value { get; set; }
@@ -50,7 +50,7 @@ namespace CQELight.DAL.MongoDb.Integration.Tests
         public override object GetKeyValue() => Value;
     }
 
-    internal class User : PersistableEntity
+    public class User : PersistableEntity
     {
         [Column]
         public virtual string Name { get; set; }
@@ -60,7 +60,7 @@ namespace CQELight.DAL.MongoDb.Integration.Tests
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 
-    internal class Post : PersistableEntity
+    public class Post : PersistableEntity
     {
         [MaxLength(65536), Column, Required]
         public virtual string Content { get; set; }
@@ -86,7 +86,7 @@ namespace CQELight.DAL.MongoDb.Integration.Tests
     }
 
     [ComposedKey(nameof(Post), nameof(Tag))]
-    internal class PostTag : ComposedKeyPersistableEntity
+    public class PostTag : ComposedKeyPersistableEntity
     {
         [KeyStorageOf(nameof(Post))]
         protected Guid Post_Id { get; set; }
@@ -108,7 +108,7 @@ namespace CQELight.DAL.MongoDb.Integration.Tests
         public override object GetKeyValue() => new { Post = Post, Tag = Tag };
     }
 
-    internal class Tag : PersistableEntity
+    public class Tag : PersistableEntity
     {
         [Index(true)]
         [Column]
@@ -117,7 +117,7 @@ namespace CQELight.DAL.MongoDb.Integration.Tests
         public virtual ICollection<Word> Words { get; set; } = new List<Word>();
     }
 
-    internal class Word : IPersistableEntity
+    public class Word : IPersistableEntity
     {
         [PrimaryKey]
         public virtual string WordValue { get; set; }
@@ -132,7 +132,7 @@ namespace CQELight.DAL.MongoDb.Integration.Tests
     }
 
     [ComplexIndex(new[] { nameof(Post), nameof(Owner), nameof(Value) }, false)]
-    internal class Comment : PersistableEntity
+    public class Comment : PersistableEntity
     {
         [Column]
         public virtual string Value { get; set; }
@@ -156,7 +156,7 @@ namespace CQELight.DAL.MongoDb.Integration.Tests
     }
 
     [ComposedKey(nameof(FirstPart), nameof(SecondPart))]
-    internal class ComposedKeyEntity : IPersistableEntity
+    public class ComposedKeyEntity : IPersistableEntity
     {
         public string FirstPart { get; set; }
         public string SecondPart { get; set; }

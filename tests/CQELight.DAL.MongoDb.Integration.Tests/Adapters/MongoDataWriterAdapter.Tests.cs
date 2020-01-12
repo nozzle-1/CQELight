@@ -4,6 +4,7 @@ using CQELight.TestFramework;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -390,6 +391,49 @@ namespace CQELight.DAL.MongoDb.Integration.Tests.Adapters
                 using (var repo = new RepositoryBase(new MongoDataReaderAdapter(), new MongoDataWriterAdapter()))
                 {
                     await repo.SaveAsync().ConfigureAwait(false);
+                }
+            }
+            finally
+            {
+                DeleteAll();
+            }
+        }
+
+        [Fact]
+        public async Task SaveAsync_With_Exceptions_Should_Revert_Data_ReplicaSet()
+        {
+            try
+            {
+                var options = new MongoDbOptions(new MongoUrlBuilder
+                {
+                    Servers = new[]
+                    {
+                        new MongoServerAddress("127.0.0.1", 27014),
+                        new MongoServerAddress("127.0.0.1", 27015),
+                        new MongoServerAddress("127.0.0.1", 27016)
+                    },
+                    Username = "hts-test",
+                    Password = "passw0rd",
+                    ReplicaSetName = "rs0"
+                }.ToMongoUrl());
+                new Bootstrapper().UseMongoDbAsMainRepository(options).Bootstrapp();
+                using (var repo = new RepositoryBase(new MongoDataReaderAdapter(), new MongoDataWriterAdapter()))
+                {
+                    var b = new WebSite
+                    {
+                        Url = "http://www.microsoft.com"
+                    };
+                    typeof(WebSite).GetProperty("Id").SetValue(b, Guid.NewGuid());
+                    var b2 = new Mock<WebSite>();
+                    b2.SetupGet(m => m.Url).Throws(new Exception());
+                    repo.MarkForInsert(b);
+                    repo.MarkForInsert(b2);
+
+                    await repo.SaveAsync().ConfigureAwait(false);
+                }
+                using (var repo = new RepositoryBase(new MongoDataReaderAdapter(), new MongoDataWriterAdapter()))
+                {
+                    (await repo.GetAsync<WebSite>().CountAsync()).Should().Be(0);
                 }
             }
             finally
