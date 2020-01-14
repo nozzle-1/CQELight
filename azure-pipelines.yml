@@ -6,6 +6,8 @@ variables:
 
 trigger:
 - develop
+- feature/*
+- release/*
 
 steps:
 - task : DotNetCoreInstaller@1
