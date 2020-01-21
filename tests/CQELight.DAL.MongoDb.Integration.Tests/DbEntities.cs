@@ -166,5 +166,12 @@ namespace CQELight.DAL.MongoDb.Integration.Tests
             => !string.IsNullOrWhiteSpace(FirstPart + SecondPart);
     }
 
+    public class SpecificMongoObject
+    {
+        public MongoDB.Bson.ObjectId Id { get; set; }
+        public string Value { get; set; }
+        public int IntValue { get; set; }
+    }
+
 
 }

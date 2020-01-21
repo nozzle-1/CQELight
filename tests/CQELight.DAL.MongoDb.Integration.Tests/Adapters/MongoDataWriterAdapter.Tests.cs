@@ -38,6 +38,7 @@ namespace CQELight.DAL.MongoDb.Integration.Tests.Adapters
             GetCollection<Post>().DeleteMany(FilterDefinition<Post>.Empty);
             GetCollection<Comment>().DeleteMany(FilterDefinition<Comment>.Empty);
             GetCollection<User>().DeleteMany(FilterDefinition<User>.Empty);
+            GetCollection<SpecificMongoObject>().DeleteMany(FilterDefinition<SpecificMongoObject>.Empty);
         }
 
         #endregion
@@ -90,6 +91,35 @@ namespace CQELight.DAL.MongoDb.Integration.Tests.Adapters
                 var testB = collection.Find(FilterDefinition<WebSite>.Empty).ToList();
                 testB.Should().HaveCount(1);
                 testB[0].Url.Should().Be("http://www.microsoft.com");
+            }
+            finally
+            {
+                DeleteAll();
+            }
+        }
+
+        [Fact]
+        public async Task Insert_Should_Consider_ObjectId()
+        {
+            try
+            {
+                using (var repo = new RepositoryBase(new MongoDataReaderAdapter(), new MongoDataWriterAdapter()))
+                {
+                    var mongoObj = new SpecificMongoObject
+                    {
+                        IntValue = 42,
+                        Value = "my str value"
+                    };
+                    repo.MarkForInsert(mongoObj);
+                    await repo.SaveAsync().ConfigureAwait(false);
+                }
+
+                var collection = GetCollection<SpecificMongoObject>();
+                var testB = collection.Find(FilterDefinition<SpecificMongoObject>.Empty).ToList();
+                testB.Should().HaveCount(1);
+                testB[0].IntValue.Should().Be(42);
+                testB[0].Value.Should().Be("my str value");
+                testB[0].Id.ToString().Should().NotBeNullOrWhiteSpace();
             }
             finally
             {
