@@ -1,6 +1,6 @@
 # CQELight
 
-Documentation is avaiable at this adress : https://cqelight.readthedocs.io
+Documentation is available at : https://cqelight.readthedocs.io
 
 [![Build Status](https://dev.azure.com/hybrid-technologies-solutions/CQELight_CI/_apis/build/status/CQELight-CI?branchName=develop)](https://dev.azure.com/hybrid-technologies-solutions/CQELight_CI/_build/latest?definitionId=7&branchName=develop)
 [![Documentation Status](https://readthedocs.org/projects/cqelight/badge/?version=latest)](https://cqelight.readthedocs.io/en/latest/?badge=latest)
