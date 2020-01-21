@@ -2,13 +2,20 @@
 
 namespace CQELight.DAL.MongoDb
 {
-    internal static class MongoDbContext
+    /// <summary>
+    /// A specific Db Context related to MongoDB.
+    /// </summary>
+    public static class MongoDbContext
     {
         #region Properties
 
-        public static MongoClient MongoClient { get; set; }
-        public static IMongoDatabase Database => MongoClient.GetDatabase(DatabaseName ?? "DefaultDatabase");
-        public static string DatabaseName { get; set; } = null;
+        /// <summary>
+        /// Current instance of the MongoDB Client.
+        /// Only configured after Bootstrapper.Boostrapp is called.
+        /// </summary>
+        public static MongoClient MongoClient { get; internal set; }
+        internal static IMongoDatabase Database => MongoClient.GetDatabase(DatabaseName ?? "DefaultDatabase");
+        internal static string DatabaseName { get; set; } = null;
 
         #endregion
 

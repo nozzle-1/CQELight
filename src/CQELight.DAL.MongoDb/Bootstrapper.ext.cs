@@ -7,6 +7,7 @@ using CQELight.Tools;
 using CQELight.Tools.Extensions;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Driver;
 using System;
 using System.Linq;
 
@@ -47,6 +48,8 @@ namespace CQELight
                     {
                         bootstrapper.AddIoCRegistration(new TypeRegistration<MongoDataReaderAdapter>(true));
                         bootstrapper.AddIoCRegistration(new TypeRegistration<MongoDataWriterAdapter>(true));
+
+                        bootstrapper.AddIoCRegistration(new InstanceTypeRegistration(MongoDbContext.MongoClient, RegistrationLifetime.Singleton, typeof(MongoClient)));
 
                         var entities = ReflectionTools.GetAllTypes()
                         .Where(t => typeof(IPersistableEntity).IsAssignableFrom(t)).ToList();
