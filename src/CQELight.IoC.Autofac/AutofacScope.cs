@@ -2,11 +2,14 @@
 using Autofac.Core;
 using CQELight.Abstractions.IoC.Interfaces;
 using CQELight.Implementations.IoC;
+using CQELight.IoC.Exceptions;
 using CQELight.Tools;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CQELight.IoC.Autofac
 {
@@ -14,24 +17,16 @@ namespace CQELight.IoC.Autofac
     {
         #region Members
 
-        private static MethodInfo s_GetAllInstancesMethod;
+        private static MethodInfo? s_GetAllInstancesMethod;
         private readonly IComponentContext componentContext;
+        private readonly ILogger<AutofacScope>? logger;
 
         #endregion
 
         #region Properties
 
-        private static MethodInfo GetAllInstancesMethod
-        {
-            get
-            {
-                if (s_GetAllInstancesMethod == null)
-                {
-                    s_GetAllInstancesMethod = Array.Find(typeof(AutofacScope).GetMethods(), m => m.Name == nameof(AutofacScope.ResolveAllInstancesOf) && m.IsGenericMethod);
-                }
-                return s_GetAllInstancesMethod;
-            }
-        }
+        private static MethodInfo GetAllInstancesMethod 
+            => s_GetAllInstancesMethod ??= Array.Find(typeof(AutofacScope).GetMethods(), m => m.Name == nameof(ResolveAllInstancesOf) && m.IsGenericMethod);
 
         /// <summary>
         /// Current Id of the scope
@@ -41,7 +36,7 @@ namespace CQELight.IoC.Autofac
         /// <summary>
         /// Indicates if scope is disposed or not.
         /// </summary>
-        public bool IsDisposed { get; private set; }
+        public bool IsDisposed { get; }
 
         #endregion
 
@@ -59,6 +54,18 @@ namespace CQELight.IoC.Autofac
             Id = Guid.NewGuid();
         }
 
+        internal AutofacScope(ILifetimeScope scope, ILogger<AutofacScope> logger)
+            : this(scope)
+        {
+            this.logger = logger;
+        }
+
+        internal AutofacScope(IComponentContext context, ILogger<AutofacScope> logger)
+            : this(context)
+        {
+            this.logger = logger;
+        }
+
         ~AutofacScope()
         {
             Dispose(false);
@@ -73,13 +80,14 @@ namespace CQELight.IoC.Autofac
         /// </summary>
         /// <param name="typeRegisterAction">Specific child registration..</param>
         /// <returns>Child scope.</returns>
-        public IScope CreateChildScope(Action<ITypeRegister> typeRegisterAction = null)
+        public IScope CreateChildScope(Action<ITypeRegister>? typeRegisterAction = null)
         {
             if (componentContext is ILifetimeScope scope)
             {
-                Action<ContainerBuilder> act = null;
+                Action<ContainerBuilder>? act = null;
                 if (typeRegisterAction != null)
                 {
+                    logger?.LogDebug("Adding some custom registration in child scope");
                     var typeRegister = new TypeRegister();
                     typeRegisterAction.Invoke(typeRegister);
                     act += b => AutofacTools.RegisterContextTypes(b, typeRegister);
@@ -90,10 +98,8 @@ namespace CQELight.IoC.Autofac
                 }
                 return new AutofacScope(scope.BeginLifetimeScope());
             }
-            else
-            {
-                throw new InvalidOperationException("Autofac cannot create a child scope from IComponentContext. Parent scope should be created with the ctor that takes an ILifeTimeScope parameter");
-            }
+            logger?.LogError("Autofac cannot create a child scope from IComponentContext. Parent scope should be created with the ctor that takes an ILifeTimeScope parameter");
+            throw new InvalidOperationException("Autofac cannot create a child scope from IComponentContext. Parent scope should be created with the ctor that takes an ILifeTimeScope parameter");
         }
 
         #endregion
@@ -105,7 +111,7 @@ namespace CQELight.IoC.Autofac
         /// </summary>
         /// <typeparam name="T">Instance of type we want to resolve.</typeparam>
         /// <param name="parameters">Parameters for resolving.</param>
-        /// <returns></returns>
+        /// <returns>Instance of T if any, null otherwise</returns>
         public T Resolve<T>(params IResolverParameter[] parameters) where T : class
             => componentContext.ResolveOptional<T>(GetParams(parameters));
 
@@ -115,7 +121,7 @@ namespace CQELight.IoC.Autofac
         /// <param name="type">Type we want to resolve instance.</param>
         /// <param name="parameters">Parameters for resolving.</param>
         /// <returns>Instance of resolved type.</returns>
-        public object Resolve(Type type, params IResolverParameter[] parameters)
+        public object? Resolve(Type type, params IResolverParameter[] parameters)
             => componentContext.ResolveOptional(type, GetParams(parameters));
 
         /// <summary>
@@ -123,33 +129,55 @@ namespace CQELight.IoC.Autofac
         /// </summary>
         /// <typeparam name="T">Excepted types.</typeparam>
         /// <returns>Collection of implementations for type.</returns>
-        public IEnumerable<T> ResolveAllInstancesOf<T>() where T : class
+        public IEnumerable<T>? ResolveAllInstancesOf<T>() where T : class
             => componentContext.ResolveOptional<IEnumerable<T>>();
 
         /// <summary>
         /// Retrieve all instances of a specific type from IoC container.
         /// </summary>
-        /// <param name="t">Typeo of elements we want.</param>
+        /// <param name="type">Typeof of elements we want.</param>
         /// <returns>Collection of implementations for type.</returns>
-        public IEnumerable ResolveAllInstancesOf(Type t)
-            => GetAllInstancesMethod.MakeGenericMethod(t).Invoke(this, null) as IEnumerable;
+        public IEnumerable? ResolveAllInstancesOf(Type type)
+            => GetAllInstancesMethod.MakeGenericMethod(type).Invoke(this, null) as IEnumerable;
+
+        /// <inheritdoc />
+        public T ResolveRequired<T>(params IResolverParameter[] parameters) where T : class
+            => (T) ResolveRequired(typeof(T), parameters);
+
+        /// <inheritdoc />
+        public object ResolveRequired(Type type, params IResolverParameter[] parameters)
+        {
+            try
+            {
+                return componentContext.Resolve(type, GetParams(parameters));
+            }
+            catch (DependencyResolutionException dpExc)
+            {
+                logger?.LogError(dpExc, $"Unable to resolve {type.AssemblyQualifiedName}");
+                throw new IoCResolutionException($"Unable to resolve {type.AssemblyQualifiedName}", dpExc);
+            }
+        }
 
         #endregion
 
         #region Private methods
 
-        private IEnumerable<Parameter> GetParams(IResolverParameter[] parameters)
+        private IEnumerable<Parameter> GetParams(IEnumerable<IResolverParameter> parameters)
         {
             var @params = new List<Parameter>();
             foreach (var par in parameters)
             {
-                if (par is NameResolverParameter namePar)
+                switch (par)
                 {
-                    @params.Add(new NamedParameter(namePar.Name, namePar.Value));
-                }
-                else if (par is TypeResolverParameter typePar)
-                {
-                    @params.Add(new TypedParameter(typePar.Type, typePar.Value));
+                    case NameResolverParameter namePar:
+                        @params.Add(new NamedParameter(namePar.Name, namePar.Value));
+                        break;
+                    case TypeResolverParameter typePar:
+                        @params.Add(new TypedParameter(typePar.Type, typePar.Value));
+                        break;
+                    default:
+                        logger?.LogWarning($"Unable to find parameter type for resolution for instance {par.GetType().FullName}");
+                        break;
                 }
             }
             return @params;
