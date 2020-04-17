@@ -1,8 +1,9 @@
-﻿using CQELight.EventStore.EFCore.Common;
+﻿using CQELight.EventStore;
+using CQELight.EventStore.EFCore.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace CQELight.EventStore.EFCore.Integration.Tests
+namespace Geneao
 {
     public class EventStoreDbContextCreator : IDesignTimeDbContextFactory<EventStoreDbContext>
     {
