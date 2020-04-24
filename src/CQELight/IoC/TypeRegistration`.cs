@@ -1,8 +1,4 @@
-﻿using CQELight.Abstractions.IoC.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 
 namespace CQELight.IoC
 {
@@ -13,7 +9,6 @@ namespace CQELight.IoC
     public class TypeRegistration<T> : TypeRegistration
         where T : class
     {
-
         #region Ctor
 
         /// <summary>

@@ -1,13 +1,10 @@
 ﻿using CQELight.EventStore.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.EventStore.EFCore.Common
 {
-    class EventArchiveEntityTypeConfiguration : IEntityTypeConfiguration<ArchiveEvent>
+    internal class EventArchiveEntityTypeConfiguration : IEntityTypeConfiguration<ArchiveEvent>
     {
         public void Configure(EntityTypeBuilder<ArchiveEvent> builder)
         {

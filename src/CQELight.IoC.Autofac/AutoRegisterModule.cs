@@ -5,21 +5,17 @@ using CQELight.Abstractions.IoC.Interfaces;
 using CQELight.IoC.Attributes;
 using CQELight.Tools;
 using CQELight.Tools.Extensions;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using A = Autofac;
 
 namespace CQELight.IoC.Autofac
 {
     internal class AutoRegisterModule : A.Module
     {
-
         #region Members
 
-        private readonly string[] _excludedAutoRegisterTypeDlls;
+        private readonly string[] excludedAutoRegisterTypeDlls;
 
         #endregion
 
@@ -27,7 +23,7 @@ namespace CQELight.IoC.Autofac
 
         public AutoRegisterModule(params string[] excludedAutoRegisterTypeDlls)
         {
-            _excludedAutoRegisterTypeDlls = (excludedAutoRegisterTypeDlls ?? Enumerable.Empty<string>()).Concat(new[] { "Autofac" }).ToArray();
+            this.excludedAutoRegisterTypeDlls = (excludedAutoRegisterTypeDlls ?? Enumerable.Empty<string>()).Concat(new[] { "Autofac" }).ToArray();
         }
 
         #endregion
@@ -37,7 +33,7 @@ namespace CQELight.IoC.Autofac
         {
             base.Load(builder);
 
-            foreach (var type in ReflectionTools.GetAllTypes(_excludedAutoRegisterTypeDlls)
+            foreach (var type in ReflectionTools.GetAllTypes(excludedAutoRegisterTypeDlls)
                 .Where(t =>
                     (t.ImplementsRawGenericInterface(typeof(ICommandHandler<>)) || t.ImplementsRawGenericInterface(typeof(IDomainEventHandler<>))) && t.IsClass && !t.IsAbstract).ToList())
             {
@@ -52,7 +48,7 @@ namespace CQELight.IoC.Autofac
                 }
             }
 
-            foreach (var type in ReflectionTools.GetAllTypes(_excludedAutoRegisterTypeDlls)
+            foreach (var type in ReflectionTools.GetAllTypes(excludedAutoRegisterTypeDlls)
                 .Where(t => typeof(IAutoRegisterType).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract).ToList())
             {
                 var registration = builder.RegisterType(type)
@@ -66,7 +62,7 @@ namespace CQELight.IoC.Autofac
                 }
             }
 
-            foreach (var type in ReflectionTools.GetAllTypes(_excludedAutoRegisterTypeDlls)
+            foreach (var type in ReflectionTools.GetAllTypes(excludedAutoRegisterTypeDlls)
                 .Where(t => typeof(IAutoRegisterTypeSingleInstance).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract).ToList())
             {
                 var registration = builder.RegisterType(type)

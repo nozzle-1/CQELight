@@ -5,24 +5,40 @@ using CQELight.DAL.MongoDb.Mapping;
 using CQELight.Tools;
 using CQELight.Tools.Extensions;
 using MongoDB.Driver;
-using MongoDB.Driver.Core.Operations;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace CQELight.DAL.MongoDb.Adapters
 {
-    class MongoDataWriterAdapter : DisposableObject, IDataWriterAdapter
+    /// <summary>
+    /// Data-writing adapter to use with MongoDb.
+    /// </summary>
+    public class MongoDataWriterAdapter : DisposableObject, IDataWriterAdapter
     {
         #region Members
 
-        private IClientSessionHandle session;
+        private IClientSessionHandle? session;
         private int actions = 0;
-        private SemaphoreSlim sessionLock = new SemaphoreSlim(1);
+        private readonly SemaphoreSlim sessionLock = new SemaphoreSlim(1);
+        private readonly SemaphoreSlim parallelSafety;
+
+        #endregion
+
+        #region Ctor
+
+        /// <summary>
+        /// Creates a new instance of <see cref="MongoDataWriterAdapter"/>.
+        /// </summary>
+        public MongoDataWriterAdapter()
+        {
+            if (MongoDbContext.MongoClient == null)
+            {
+                throw new InvalidOperationException("MongoDbClient hasn't been initialized yet. Please, ensure that you've bootstrapped extension before attempting creating a new instance of MongoDataWriterAdapter");
+            }
+            parallelSafety = new SemaphoreSlim(MongoDbContext.MongoClient.Settings.MaxConnectionPoolSize / 2);
+        }
 
         #endregion
 
@@ -32,7 +48,7 @@ namespace CQELight.DAL.MongoDb.Adapters
         {
             if (session == null)
             {
-                await sessionLock.WaitAsync();
+                await sessionLock.WaitAsync().ConfigureAwait(false);
                 try
                 {
                     if (session == null)
@@ -127,8 +143,16 @@ namespace CQELight.DAL.MongoDb.Adapters
                 await CheckIfSessionIsStartedAsync().ConfigureAwait(false);
                 var entityType = entity.GetType();
                 var deletionFilter = ExtractIdValue(entity).GetIdFilterFromIdValue<T>(entityType);
-                await GetCollection<T>(entityType).DeleteOneAsync(deletionFilter).ConfigureAwait(false);
-                actions++;
+                try
+                {
+                    await parallelSafety.WaitAsync();
+                    await GetCollection<T>(entityType).DeleteOneAsync(deletionFilter).ConfigureAwait(false);
+                    actions++;
+                }
+                finally
+                {
+                    parallelSafety.Release();
+                }
             }
             else
             {
@@ -136,7 +160,7 @@ namespace CQELight.DAL.MongoDb.Adapters
                 {
                     basePersistableEntity.Deleted = true;
                     basePersistableEntity.DeletionDate = DateTime.UtcNow;
-                    await UpdateAsync(entity);
+                    await UpdateAsync(entity).ConfigureAwait(false);
                 }
                 else
                 {
@@ -150,8 +174,16 @@ namespace CQELight.DAL.MongoDb.Adapters
         public async Task InsertAsync<T>(T entity) where T : class
         {
             await CheckIfSessionIsStartedAsync().ConfigureAwait(false);
-            await GetCollection<T>(entity.GetType()).InsertOneAsync(entity).ConfigureAwait(false);
-            actions++;
+            try
+            {
+                await parallelSafety.WaitAsync();
+                await GetCollection<T>(entity.GetType()).InsertOneAsync(entity).ConfigureAwait(false);
+                actions++;
+            }
+            finally
+            {
+                parallelSafety.Release();
+            }
         }
         public async Task UpdateAsync<T>(T entity) where T : class
         {
@@ -160,29 +192,38 @@ namespace CQELight.DAL.MongoDb.Adapters
             var idValue = ExtractIdValue(entity);
             var idFilter = idValue.GetIdFilterFromIdValue<T>(entityType);
 
-            var data = (await GetCollection<T>(entityType).FindAsync(idFilter)).FirstOrDefault();
-
-            var result = await GetCollection<T>(entityType).ReplaceOneAsync(idFilter, entity).ConfigureAwait(false);
-            if (result.ModifiedCount == 0)
+            try
             {
-                throw new InvalidOperationException($"Entity of type {typeof(T).FullName} with id value {idValue} cannot be updated as it doesn't currently exists within database. Insert it instead of update it.");
+                await parallelSafety.WaitAsync();
+                var result = await GetCollection<T>(entityType).ReplaceOneAsync(idFilter, entity).ConfigureAwait(false);
+                if (result.ModifiedCount == 0)
+                {
+                    throw new InvalidOperationException($"Entity of type {typeof(T).FullName} with id value {idValue} cannot be updated as it doesn't currently exists within database. Insert it instead of update it.");
+                }
+                actions += Convert.ToInt32(result.ModifiedCount);
             }
-            actions += Convert.ToInt32(result.ModifiedCount);
+            finally
+            {
+                parallelSafety.Release();
+            }
         }
-
 
         public async Task<int> SaveAsync()
         {
-            try
+            if (session != null) // nothing is writen
             {
-                await session.CommitTransactionAsync().ConfigureAwait(false);
-                return actions;
+                try
+                {
+                    await session.CommitTransactionAsync().ConfigureAwait(false);
+                    return actions;
+                }
+                catch
+                {
+                    await session.AbortTransactionAsync().ConfigureAwait(false);
+                    return 0;
+                }
             }
-            catch
-            {
-                await session.AbortTransactionAsync().ConfigureAwait(false);
-                return 0;
-            }
+            return 0;
         }
 
         #endregion

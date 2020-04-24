@@ -4,7 +4,6 @@ using CQELight.Tools.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CQELight.Dispatcher.Configuration.Events
 {

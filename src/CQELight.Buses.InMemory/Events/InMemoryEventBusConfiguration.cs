@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 
 namespace CQELight.Buses.InMemory.Events
 {
@@ -12,7 +10,6 @@ namespace CQELight.Buses.InMemory.Events
     /// </summary>
     public class InMemoryEventBusConfiguration
     {
-
         #region Static properties
 
         /// <summary>
@@ -49,7 +46,7 @@ namespace CQELight.Buses.InMemory.Events
         /// <summary>
         /// Callback to invoke when delivery failed.
         /// </summary>
-        public Action<IDomainEvent, IEventContext> OnFailedDelivery { get; internal set; }
+        public Action<IDomainEvent, IEventContext?>? OnFailedDelivery { get; internal set; }
         /// <summary>
         /// Expression used to defined custom if clauses.
         /// </summary>
@@ -75,7 +72,7 @@ namespace CQELight.Buses.InMemory.Events
         }
 
         private InMemoryEventBusConfiguration(byte nbRetries, ulong waitingTimeMilliseconds,
-            Action<IDomainEvent, IEventContext> onFailedDelivery)
+            Action<IDomainEvent, IEventContext?>? onFailedDelivery)
             : this()
         {
             WaitingTimeMilliseconds = waitingTimeMilliseconds;

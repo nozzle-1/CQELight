@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.TestFramework
+﻿namespace CQELight.TestFramework
 {
     /// <summary>
     /// Bunch of tools only use in Unit test

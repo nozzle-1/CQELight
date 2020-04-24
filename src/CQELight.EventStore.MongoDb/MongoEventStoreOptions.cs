@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CQELight.EventStore.MongoDb
 {
@@ -11,7 +10,6 @@ namespace CQELight.EventStore.MongoDb
     /// </summary>
     public class MongoEventStoreOptions
     {
-
         #region Properties
 
         /// <summary>
@@ -21,18 +19,23 @@ namespace CQELight.EventStore.MongoDb
         /// <summary>
         /// Provider of snapshot behavior.
         /// </summary>
-        public ISnapshotBehaviorProvider SnapshotBehaviorProvider { get; }
+        public ISnapshotBehaviorProvider? SnapshotBehaviorProvider { get; }
         /// <summary>
         /// Behavior to follow with events that have been used when generating a snapshot.
         /// </summary>
         public SnapshotEventsArchiveBehavior SnapshotEventsArchiveBehavior { get; }
-        public string Username { get; internal set; }
-        public string Password { get; internal set; }
+        /// <summary>
+        /// Username to access database
+        /// </summary>
+        public string? Username { get; internal set; }
+        /// <summary>
+        /// Password to access databases
+        /// </summary>
+        public string? Password { get; internal set; }
 
         #endregion
 
         #region Ctor
-
 
         /// <summary>
         /// Creates a new options class with a defined snapshot behavior provider and servers urls.
@@ -40,7 +43,7 @@ namespace CQELight.EventStore.MongoDb
         /// <param name="snapshotBehaviorProvider">Snapshot behavior provider.</param>
         /// <param name="snapshotEventsArchiveBehavior">Behavior for archive events after creating snapshot.</param>
         /// <param name="serversUrls">Collection of urls to use as server.</param>
-        public MongoEventStoreOptions(ISnapshotBehaviorProvider snapshotBehaviorProvider,
+        public MongoEventStoreOptions(ISnapshotBehaviorProvider? snapshotBehaviorProvider,
             SnapshotEventsArchiveBehavior snapshotEventsArchiveBehavior = SnapshotEventsArchiveBehavior.StoreToNewDatabase,
             params string[] serversUrls)
         {
@@ -64,7 +67,7 @@ namespace CQELight.EventStore.MongoDb
         /// <param name="snapshotEventsArchiveBehavior">Behavior for archive events after creating snapshot.</param>
         /// <param name="serversUrls">Collection of urls to use as server.</param>
         public MongoEventStoreOptions(string userName, string password,
-            ISnapshotBehaviorProvider snapshotBehaviorProvider,
+            ISnapshotBehaviorProvider? snapshotBehaviorProvider,
             SnapshotEventsArchiveBehavior snapshotEventsArchiveBehavior = SnapshotEventsArchiveBehavior.StoreToNewDatabase,
             params string[] serversUrls)
             : this(snapshotBehaviorProvider, snapshotEventsArchiveBehavior, serversUrls)

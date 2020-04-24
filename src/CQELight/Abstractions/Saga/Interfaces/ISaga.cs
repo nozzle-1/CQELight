@@ -1,9 +1,6 @@
 ﻿using CQELight.Abstractions.CQS.Interfaces;
 using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Abstractions.IoC.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Abstractions.Saga.Interfaces
 {

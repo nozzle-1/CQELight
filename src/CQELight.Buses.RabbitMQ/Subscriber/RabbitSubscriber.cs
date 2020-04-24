@@ -6,9 +6,7 @@ using CQELight.Abstractions.IoC.Interfaces;
 using CQELight.Buses.InMemory.Commands;
 using CQELight.Buses.InMemory.Events;
 using CQELight.Buses.RabbitMQ.Common;
-using CQELight.Buses.RabbitMQ.Extensions;
 using CQELight.Buses.RabbitMQ.Network;
-using CQELight.Buses.RabbitMQ.Subscriber.Internal;
 using CQELight.Events.Serializers;
 using CQELight.Tools;
 using CQELight.Tools.Extensions;
@@ -34,11 +32,9 @@ namespace CQELight.Buses.RabbitMQ.Subscriber
         private readonly ILogger _logger;
         private readonly RabbitSubscriberConfiguration _config;
         private List<EventingBasicConsumer> _consumers = new List<EventingBasicConsumer>();
-        private IConnection _connection;
-        private IModel _channel;
-        private readonly Func<InMemoryEventBus> _inMemoryEventBusFactory;
-        private readonly Func<InMemoryCommandBus> _inMemoryCommandBusFactory;
-        private readonly IScopeFactory scopeFactory;
+        private IConnection? _connection;
+        private IModel? _channel;
+        private readonly IScopeFactory? scopeFactory;
 
         #endregion
 
@@ -47,7 +43,7 @@ namespace CQELight.Buses.RabbitMQ.Subscriber
         public RabbitSubscriber(
             ILoggerFactory loggerFactory,
             RabbitSubscriberConfiguration config,
-            IScopeFactory scopeFactory = null)
+            IScopeFactory? scopeFactory = null)
         {
             if (loggerFactory == null)
             {
@@ -101,12 +97,12 @@ namespace CQELight.Buses.RabbitMQ.Subscriber
 
         private async void OnEventReceived(object model, BasicDeliverEventArgs args)
         {
-            if (args.Body?.Any() == true && model is EventingBasicConsumer consumer)
+            if (!args.Body.IsEmpty && model is EventingBasicConsumer consumer)
             {
                 var result = Result.Ok();
                 try
                 {
-                    var dataAsStr = Encoding.UTF8.GetString(args.Body);
+                    var dataAsStr = Encoding.UTF8.GetString(args.Body.ToArray());
                     var enveloppe = dataAsStr.FromJson<Enveloppe>();
                     if (enveloppe != null)
                     {
@@ -124,48 +120,64 @@ namespace CQELight.Buses.RabbitMQ.Subscriber
                                 if (typeof(IDomainEvent).IsAssignableFrom(objType))
                                 {
                                     var evt = serializer.DeserializeEvent(enveloppe.Data, objType);
-                                    try
+                                    if (evt != null)
                                     {
-                                        _config.EventCustomCallback?.Invoke(evt);
-                                    }
-                                    catch(Exception e)
-                                    {
-                                        _logger.LogError(
-                                            $"Error when executing custom callback for event {objType.AssemblyQualifiedName}. {e}");
-                                        result = Result.Fail();
-                                    }
-                                    if (scopeFactory != null)
-                                    {
-                                        using (var scope = scopeFactory.CreateScope())
+                                        try
                                         {
-                                            var bus = scope.Resolve<InMemoryEventBus>();
-                                            if (_config.DispatchInMemory && bus != null)
+                                            _config.EventCustomCallback?.Invoke(evt);
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            _logger.LogError(
+                                                $"Error when executing custom callback for event {objType.AssemblyQualifiedName}. {e}");
+                                            result = Result.Fail();
+                                        }
+                                        if (scopeFactory != null)
+                                        {
+                                            using (var scope = scopeFactory.CreateScope())
                                             {
-                                                result = await bus.PublishEventAsync(evt).ConfigureAwait(false);
+                                                var bus = scope.Resolve<InMemoryEventBus>();
+                                                if (_config.DispatchInMemory && bus != null)
+                                                {
+                                                    result = await bus.PublishEventAsync(evt).ConfigureAwait(false);
+                                                }
                                             }
                                         }
+                                    }
+                                    else
+                                    {
+                                        _logger.LogWarning($"An event received by RabbitMQ wasn't deserialized. Envelope body : {enveloppe.Data}");
                                     }
                                 }
                                 else if (typeof(ICommand).IsAssignableFrom(objType))
                                 {
                                     var cmd = serializer.DeserializeCommand(enveloppe.Data, objType);
-                                    try
+                                    if (cmd != null)
                                     {
-                                        _config.CommandCustomCallback?.Invoke(cmd);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        _logger.LogError(
-                                            $"Error when executing custom callback for command {objType.AssemblyQualifiedName}. {e}");
-                                        result = Result.Fail();
-                                    }
-                                    using (var scope = scopeFactory.CreateScope())
-                                    {
-                                        var bus = scope.Resolve<InMemoryCommandBus>();
-                                        if (_config.DispatchInMemory && bus != null)
+                                        try
                                         {
-                                            result = await bus.DispatchAsync(cmd).ConfigureAwait(false);
+                                            _config.CommandCustomCallback?.Invoke(cmd);
                                         }
+                                        catch (Exception e)
+                                        {
+                                            _logger.LogError(e, $"Error when executing custom callback for command {objType.AssemblyQualifiedName}");
+                                            result = Result.Fail();
+                                        }
+                                        if (scopeFactory != null)
+                                        {
+                                            using (var scope = scopeFactory.CreateScope())
+                                            {
+                                                var bus = scope.Resolve<InMemoryCommandBus>();
+                                                if (_config.DispatchInMemory && bus != null)
+                                                {
+                                                    result = await bus.DispatchAsync(cmd).ConfigureAwait(false);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        _logger.LogWarning($"A command received by RabbitMQ wasn't deserialized. Envelope body : {enveloppe.Data}");
                                     }
                                 }
                             }
@@ -200,8 +212,8 @@ namespace CQELight.Buses.RabbitMQ.Subscriber
         {
             try
             {
-                _channel.Dispose();
-                _channel.Dispose();
+                _channel?.Dispose();
+                _connection?.Dispose();
                 _consumers.DoForEach(c => c.Received -= OnEventReceived);
                 _consumers.Clear();
             }
@@ -215,15 +227,11 @@ namespace CQELight.Buses.RabbitMQ.Subscriber
 
         #region Private methods
 
-        private IDispatcherSerializer GetSerializerByContentType(string contentType)
-        {
-            switch(contentType)
+        private IDispatcherSerializer GetSerializerByContentType(string? contentType)
+            => contentType switch
             {
-                case "text/json":
-                default:
-                    return new JsonDispatcherSerializer();
-            }
-        }
+                _ => new JsonDispatcherSerializer(),
+            };
 
         #endregion
 

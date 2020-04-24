@@ -5,10 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using Xunit;
 
-[assembly: CollectionBehavior(DisableTestParallelization = true)]
 namespace CQELight.DAL.MongoDb.Integration.Tests
 {
     public static class Global
@@ -165,6 +163,13 @@ namespace CQELight.DAL.MongoDb.Integration.Tests
 
         public bool IsKeySet()
             => !string.IsNullOrWhiteSpace(FirstPart + SecondPart);
+    }
+
+    public class SpecificMongoObject
+    {
+        public MongoDB.Bson.ObjectId Id { get; set; }
+        public string Value { get; set; }
+        public int IntValue { get; set; }
     }
 
 

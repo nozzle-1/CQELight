@@ -1,14 +1,11 @@
 ﻿using CQELight.Tools;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace CQELight.Buses.InMemory.Events
 {
     sealed class EventHandlingInfos
     {
-
         #region Properties
 
 

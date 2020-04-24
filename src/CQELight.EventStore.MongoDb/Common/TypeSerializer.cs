@@ -1,11 +1,6 @@
-﻿using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Tools.Extensions;
-using MongoDB.Bson.Serialization;
+﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CQELight.EventStore.MongoDb.Common
 {
@@ -33,7 +28,7 @@ namespace CQELight.EventStore.MongoDb.Common
             {
                 return Type.GetType(typeAsString);
             }
-            return null;
+            return null!;
         }
 
         #endregion

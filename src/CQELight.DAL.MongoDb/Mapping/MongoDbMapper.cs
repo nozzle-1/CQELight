@@ -1,18 +1,14 @@
-﻿using CQELight.DAL.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CQELight.DAL.MongoDb.Mapping
 {
     internal static class MongoDbMapper
     {
-
         #region Static properties
 
-        static ConcurrentBag<MappingInfo> _mappings = new ConcurrentBag<MappingInfo>();
+        private static readonly ConcurrentBag<MappingInfo> _mappings = new ConcurrentBag<MappingInfo>();
 
         #endregion
 

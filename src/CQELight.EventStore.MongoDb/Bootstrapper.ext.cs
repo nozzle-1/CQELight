@@ -1,24 +1,18 @@
-﻿using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Abstractions.EventStore.Interfaces;
+﻿using CQELight.Abstractions.EventStore.Interfaces;
 using CQELight.EventStore.MongoDb;
 using CQELight.EventStore.MongoDb.Common;
 using CQELight.IoC;
-using CQELight.Tools.Extensions;
 using MongoDB.Bson.Serialization;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CQELight
 {
     public static class BootstrapperExtensions
     {
-
         #region Public static methods
 
         /// <summary>
-        /// Use MongoDb with a one or multiple server urls. 
+        /// Use MongoDb with a one or multiple server urls.
         /// Multiples urls are usefull when a replica set has been created.
         /// </summary>
         /// <param name="bootstrapper">Bootstrapper instance.</param>
@@ -32,8 +26,7 @@ namespace CQELight
             }
 
             var service = new MongoDbEventStoreBootstrappService
-            {
-                BootstrappAction = (ctx) =>
+            (ctx =>
                 {
                     BsonSerializer.RegisterSerializer(typeof(Type), new TypeSerializer());
                     BsonSerializer.RegisterSerializer(typeof(Guid), new GuidSerializer());
@@ -51,7 +44,7 @@ namespace CQELight
                     }
                     EventStoreManager.Activate();
                 }
-            };
+            );
             bootstrapper.AddService(service);
             return bootstrapper;
         }

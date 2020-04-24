@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight
+﻿namespace CQELight
 {
     /// <summary>
     /// Bootstrapper options.

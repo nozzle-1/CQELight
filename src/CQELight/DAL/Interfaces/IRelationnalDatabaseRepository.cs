@@ -1,7 +1,4 @@
-﻿using CQELight.DAL.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace CQELight.DAL.Interfaces
 {
@@ -13,6 +10,5 @@ namespace CQELight.DAL.Interfaces
     public interface IRelationnalDatabaseRepository<T> : IDatabaseRepository<T>, ISqlRepository
         where T : IPersistableEntity
     {
-
     }
 }

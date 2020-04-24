@@ -7,7 +7,6 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -23,7 +22,12 @@ namespace CQELight.DAL.MongoDb.Integration.Tests.Adapters
         {
             var c = new ConfigurationBuilder().AddJsonFile("test-config.json").Build();
             new Bootstrapper().UseMongoDbAsMainRepository(new MongoDbOptions(
-                c["user"], c["password"], DatabaseName, new MongoServerAddress(c["host"], int.Parse(c["port"])))).Bootstrapp();
+                new MongoUrlBuilder
+                {
+                    Username = c["user"],
+                    Password = c["password"],
+                    Server = new MongoServerAddress(c["host"], int.Parse(c["port"]))
+                }.ToMongoUrl(), DatabaseName)).Bootstrapp();
             DeleteAll();
         }
 
@@ -39,6 +43,7 @@ namespace CQELight.DAL.MongoDb.Integration.Tests.Adapters
             GetCollection<Post>().DeleteMany(FilterDefinition<Post>.Empty);
             GetCollection<Comment>().DeleteMany(FilterDefinition<Comment>.Empty);
             GetCollection<User>().DeleteMany(FilterDefinition<User>.Empty);
+            GetCollection<SpecificMongoObject>().DeleteMany(FilterDefinition<SpecificMongoObject>.Empty);
         }
 
         #endregion
@@ -91,6 +96,35 @@ namespace CQELight.DAL.MongoDb.Integration.Tests.Adapters
                 var testB = collection.Find(FilterDefinition<WebSite>.Empty).ToList();
                 testB.Should().HaveCount(1);
                 testB[0].Url.Should().Be("http://www.microsoft.com");
+            }
+            finally
+            {
+                DeleteAll();
+            }
+        }
+
+        [Fact]
+        public async Task Insert_Should_Consider_ObjectId()
+        {
+            try
+            {
+                using (var repo = new RepositoryBase(new MongoDataReaderAdapter(), new MongoDataWriterAdapter()))
+                {
+                    var mongoObj = new SpecificMongoObject
+                    {
+                        IntValue = 42,
+                        Value = "my str value"
+                    };
+                    repo.MarkForInsert(mongoObj);
+                    await repo.SaveAsync().ConfigureAwait(false);
+                }
+
+                var collection = GetCollection<SpecificMongoObject>();
+                var testB = collection.Find(FilterDefinition<SpecificMongoObject>.Empty).ToList();
+                testB.Should().HaveCount(1);
+                testB[0].IntValue.Should().Be(42);
+                testB[0].Value.Should().Be("my str value");
+                testB[0].Id.ToString().Should().NotBeNullOrWhiteSpace();
             }
             finally
             {
@@ -370,6 +404,26 @@ namespace CQELight.DAL.MongoDb.Integration.Tests.Adapters
                     var entity = await repo.GetAsync<WebSite>(includeDeleted: true).FirstOrDefaultAsync();
                     entity.DeletionDate.Should().BeSameDateAs(DateTime.Today);
                     (await repo.GetAsync<WebSite>().CountAsync()).Should().Be(0);
+                }
+            }
+            finally
+            {
+                DeleteAll();
+            }
+        }
+
+        #endregion
+
+        #region SaveAsync
+
+        [Fact]
+        public async Task SaveAsync_Without_Updates_Should_Not_Throws()
+        {
+            try
+            {
+                using (var repo = new RepositoryBase(new MongoDataReaderAdapter(), new MongoDataWriterAdapter()))
+                {
+                    await repo.SaveAsync().ConfigureAwait(false);
                 }
             }
             finally

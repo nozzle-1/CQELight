@@ -1,7 +1,5 @@
 ﻿using CQELight.Abstractions.Events.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Abstractions.Events
 {
@@ -25,12 +23,12 @@ namespace CQELight.Abstractions.Events
         /// <summary>
         /// Linked aggregate Id if any.
         /// </summary>
-        public object AggregateId { get; protected internal set; }
+        public object? AggregateId { get; protected internal set; }
 
         /// <summary>
         /// Type of aggregate linked to event.
         /// </summary>
-        public Type AggregateType { get; protected internal set; }
+        public Type? AggregateType { get; protected internal set; }
         /// <summary>
         /// Current sequence within aggregate's events chain.
         /// </summary>

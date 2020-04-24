@@ -1,8 +1,7 @@
 ﻿using Autofac;
 using CQELight.Abstractions.IoC.Interfaces;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.IoC.Autofac
 {
@@ -10,16 +9,14 @@ namespace CQELight.IoC.Autofac
     {
         #region Members
 
-        private readonly ILifetimeScope _rootScope;
+        private readonly ILifetimeScope rootScope;
+        private readonly ILoggerFactory? loggerFactory;
 
         #endregion
 
         #region Static properties
 
-        /// <summary>
-        /// Current instance.
-        /// </summary>
-        internal static AutofacScopeFactory Instance;
+        internal static IContainer? AutofacContainer { get; set; }
 
         #endregion
 
@@ -31,9 +28,19 @@ namespace CQELight.IoC.Autofac
         /// <param name="autofacContainer">Autofac container.</param>
         public AutofacScopeFactory(ILifetimeScope autofacContainer)
         {
-            _rootScope = autofacContainer ?? throw new ArgumentNullException(nameof(autofacContainer),
+            rootScope = autofacContainer ?? throw new ArgumentNullException(nameof(autofacContainer),
                 "AutofacScopeFactory.ctor() : Autofac container should be provided.");
-            Instance = this;
+        }
+
+        /// <summary>
+        /// Default constructor with a logger instance.
+        /// </summary>
+        /// <param name="autofacContainer">Autofac container.</param>
+        /// <param name="loggerFactory">Logger factory</param>
+        public AutofacScopeFactory(ILifetimeScope autofacContainer, ILoggerFactory loggerFactory)
+            : this(autofacContainer)
+        {
+            this.loggerFactory = loggerFactory;
         }
 
         #endregion
@@ -44,7 +51,10 @@ namespace CQELight.IoC.Autofac
         /// Create a new scope.
         /// </summary>
         /// <returns>New instance of scope.</returns>
-        public IScope CreateScope() => new AutofacScope(_rootScope.BeginLifetimeScope());
+        public IScope CreateScope()
+            => loggerFactory != null
+                ? new AutofacScope(rootScope.BeginLifetimeScope(), loggerFactory.CreateLogger<AutofacScope>())
+                : new AutofacScope(rootScope.BeginLifetimeScope());
 
         #endregion
 

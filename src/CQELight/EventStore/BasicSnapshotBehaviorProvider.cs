@@ -1,17 +1,15 @@
 ﻿using CQELight.Abstractions.EventStore.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.EventStore
 {
     /// <summary>
-    /// Basic implementation of snapshot provider that holds 
+    /// Basic implementation of snapshot provider that holds
     /// a mapping dictionary of types and snapshot behavior provider.
     /// </summary>
     public class BasicSnapshotBehaviorProvider : ISnapshotBehaviorProvider
     {
-
         #region Members
 
         /// <summary>
@@ -39,12 +37,12 @@ namespace CQELight.EventStore
 
         /// <summary>
         /// Gets the behavior according of a specific event type.
-        /// Please note that this can be called multiple times from concurrent thread, so 
+        /// Please note that this can be called multiple times from concurrent thread, so
         /// you should pay attention to thread safety in your own implementation.
         /// </summary>
         /// <param name="type">Event type.</param>
         /// <returns>Snapshot behavior.</returns>
-        public ISnapshotBehavior GetBehaviorForEventType(Type type)
+        public ISnapshotBehavior? GetBehaviorForEventType(Type type)
         {
             if (_configuration.ContainsKey(type))
             {

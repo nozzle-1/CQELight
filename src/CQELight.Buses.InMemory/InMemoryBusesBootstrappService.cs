@@ -1,7 +1,5 @@
-﻿using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Buses.InMemory.Commands;
+﻿using CQELight.Buses.InMemory.Commands;
 using CQELight.Buses.InMemory.Events;
-using CQELight.IoC;
 using System;
 using System.Composition;
 
@@ -12,7 +10,9 @@ namespace CQELight.Buses.InMemory
     {
         #region Static members
 
-        private static InMemoryBusesBootstrappService _instance;
+        private static readonly object s_threadSafety = new object();
+
+        private static InMemoryBusesBootstrappService? _instance;
 
         internal static InMemoryBusesBootstrappService Instance
         {
@@ -20,7 +20,13 @@ namespace CQELight.Buses.InMemory
             {
                 if (_instance == null)
                 {
-                    _instance = new InMemoryBusesBootstrappService();
+                    lock (s_threadSafety)
+                    {
+                        if (_instance == null)
+                        {
+                            _instance = new InMemoryBusesBootstrappService();
+                        }
+                    }
                 }
                 return _instance;
             }
@@ -37,7 +43,7 @@ namespace CQELight.Buses.InMemory
             BootstrapperExt.ConfigureInMemoryEventBus(ctx.Bootstrapper, InMemoryEventBusConfiguration.Default, new string[0], ctx);
             BootstrapperExt.ConfigureInMemoryCommandBus(ctx.Bootstrapper, InMemoryCommandBusConfiguration.Default, new string[0], ctx);
         };
-        
+
         #endregion
 
     }

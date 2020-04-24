@@ -1,11 +1,8 @@
 ﻿using CQELight.DAL.Attributes;
 using CQELight.DAL.Exceptions;
 using CQELight.Tools.Extensions;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace CQELight.DAL.Common
 {
@@ -16,7 +13,7 @@ namespace CQELight.DAL.Common
     {
         #region Private members
 
-        private PropertyInfo _primaryKeyProperty;
+        private PropertyInfo? _primaryKeyProperty;
 
         #endregion
 
@@ -60,7 +57,7 @@ namespace CQELight.DAL.Common
         {
             if (PrimaryKeyProperty != null)
             {
-                object defaultValue = null;
+                object? defaultValue = null;
                 if (PrimaryKeyProperty.PropertyType.IsValueType)
                 {
                     defaultValue = PrimaryKeyProperty.PropertyType.CreateInstance();

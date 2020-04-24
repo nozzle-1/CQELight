@@ -3,9 +3,9 @@ using CQELight.Abstractions.Events;
 using CQELight.TestFramework.Extensions;
 using FluentAssertions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
+
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 namespace CQELight.TestFramework.Integration.Tests.Extensions
 {

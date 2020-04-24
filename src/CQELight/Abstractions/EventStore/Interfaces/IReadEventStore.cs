@@ -2,7 +2,6 @@
 using CQELight.Abstractions.Events.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Abstractions.EventStore.Interfaces
 {
@@ -40,7 +39,8 @@ namespace CQELight.Abstractions.EventStore.Interfaces
         /// <param name="id">Value of the id of the aggregate.</param>
         /// <returns>AsyncEnumerable of events.</returns>
         IAsyncEnumerable<IDomainEvent> GetAllEventsByAggregateId<TAggregateType, TAggregateId>(TAggregateId id)
-            where TAggregateType : AggregateRoot<TAggregateId>;
+            where TAggregateType : AggregateRoot<TAggregateId>
+            where TAggregateId : notnull;
         /// <summary>
         /// Retrieve an asynchronous stream for all events of a specific aggregate
         /// type with a specified aggregate id.

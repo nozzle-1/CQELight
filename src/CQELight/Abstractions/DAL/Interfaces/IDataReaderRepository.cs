@@ -1,10 +1,6 @@
-﻿using CQELight.DAL.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CQELight.Abstractions.DAL.Interfaces
@@ -14,7 +10,6 @@ namespace CQELight.Abstractions.DAL.Interfaces
     /// </summary>
     public interface IDataReaderRepository
     {
-
         /// <summary>
         /// Get asynchronously a bunch of entites from repository, by applying filter, order and some other.
         /// </summary>
@@ -23,8 +18,8 @@ namespace CQELight.Abstractions.DAL.Interfaces
         /// <param name="includeDeleted">Flag to indicates if soft deleted entites should be included.</param>
         /// <returns>Bunch of entites that respects defined parameters.</returns>
         IAsyncEnumerable<T> GetAsync<T>(
-            Expression<Func<T, bool>> filter = null,
-            Expression<Func<T, object>> orderBy = null,
+            Expression<Func<T, bool>>? filter = null,
+            Expression<Func<T, object>>? orderBy = null,
             bool includeDeleted = false)
             where T : class;
 

@@ -1,7 +1,6 @@
 ﻿using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Buses.RabbitMQ
 {
@@ -15,7 +14,7 @@ namespace CQELight.Buses.RabbitMQ
         /// <summary>
         /// Configured ConnectionFactory to access RabbitMQ instance(s).
         /// </summary>
-        public ConnectionFactory ConnectionFactory{ get; protected set; }
+        public ConnectionFactory ConnectionFactory { get; protected set; }
         /// <summary>
         /// Emiter application identity.
         /// </summary>
@@ -34,21 +33,16 @@ namespace CQELight.Buses.RabbitMQ
         /// is applied, which means that every event type has a lifetime of 1 day.</param>
         /// <param name="parallelDispatchEventTypes">Event types that allows parallel dispatch.</param>
         protected AbstractBaseConfiguration(string emiter, ConnectionFactory connectionFactory,
-            IEnumerable<EventLifeTimeConfiguration> eventsLifetime, IEnumerable<Type> parallelDispatchEventTypes)
+            IEnumerable<EventLifeTimeConfiguration>? eventsLifetime, IEnumerable<Type>? parallelDispatchEventTypes)
             : base(eventsLifetime, parallelDispatchEventTypes)
         {
-            if (connectionFactory == null)
-            {
-                throw new ArgumentNullException(nameof(connectionFactory));
-            }
-
             if (string.IsNullOrWhiteSpace(emiter))
             {
                 throw new ArgumentException("AbstractBaseConfiguration.Ctor() : Emiter value should be provided.", nameof(emiter));
             }
 
             Emiter = emiter;
-            ConnectionFactory = connectionFactory;
+            ConnectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         }
 
         #endregion

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.DAL.EFCore
+﻿namespace CQELight.DAL.EFCore
 {
     /// <summary>
     /// Options for using EF Core as DAL.
@@ -14,14 +10,14 @@ namespace CQELight.DAL.EFCore
         /// <summary>
         /// Flag that indicates if logicial deletion is globally disabled.
         /// Note that setting this option to true will remove logical deletion
-        /// and this CANNOT be overriden. 
+        /// and this CANNOT be overriden.
         /// </summary>
         public bool DisableLogicalDeletion { get; set; }
 
         /// <summary>
         /// Configures the assembly where the db models are maintained
         /// </summary>
-        public string ModelAssembly { get; set; }
+        public string? ModelAssembly { get; set; }
 
         #endregion
 

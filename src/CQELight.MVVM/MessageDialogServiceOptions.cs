@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.MVVM
 {
@@ -47,7 +45,7 @@ namespace CQELight.MVVM
         /// <summary>
         /// Callback to invoke when user is cancelling.
         /// </summary>
-        public Action CancelCallback { get; set; }
+        public Action? CancelCallback { get; set; }
 
         #endregion
 

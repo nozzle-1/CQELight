@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Tools
 {
@@ -25,7 +23,6 @@ namespace CQELight.Tools
         /// </summary>
         protected DisposableObject()
         {
-
         }
 
         /// <summary>

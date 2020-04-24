@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 using Newtonsoft.Json.Serialization;
 
 namespace CQELight.Tools.Serialisation
@@ -12,7 +9,6 @@ namespace CQELight.Tools.Serialisation
     /// </summary>
     public class AllFieldSerialisationContract : IJsonContractDefinition
     {
-
         #region IJsonContractDefinition
 
         public void SetDeserialisationPropertyContractDefinition(JsonProperty property, MemberInfo memberInfo)

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.IoC
+﻿namespace CQELight.IoC
 {
     /// <summary>
     /// Generic type resolver parameter.
@@ -10,7 +6,6 @@ namespace CQELight.IoC
     /// <typeparam name="T">Parameter type.</typeparam>
     public class TypeResolverParameter<T> : TypeResolverParameter
     {
-
         #region Ctor
 
         /// <summary>

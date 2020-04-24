@@ -1,7 +1,5 @@
 ﻿using CQELight.Abstractions.CQS.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Buses.InMemory.Commands
 {
@@ -25,7 +23,7 @@ namespace CQELight.Buses.InMemory.Commands
         /// </summary>
         /// <param name="onNoHandlersFound">Callback to fire.</param>
         /// <returns>Current builder.</returns>
-        public InMemoryCommandBusConfigurationBuilder AddHandlerWhenHandlerIsNotFound(Action<ICommand, ICommandContext> onNoHandlersFound)
+        public InMemoryCommandBusConfigurationBuilder AddHandlerWhenHandlerIsNotFound(Action<ICommand, ICommandContext?> onNoHandlersFound)
         {
             _config.OnNoHandlerFounds = onNoHandlersFound;
             return this;
@@ -42,9 +40,9 @@ namespace CQELight.Buses.InMemory.Commands
         {
             _config._ifClauses.Add(typeof(T), x =>
             {
-                if (x is T)
+                if (x is T xAsT)
                 {
-                    return condition(x as T);
+                    return condition(xAsT);
                 }
                 return false;
             });
@@ -61,9 +59,8 @@ namespace CQELight.Buses.InMemory.Commands
         public InMemoryCommandBusConfigurationBuilder AllowMultipleHandlersFor<T>(bool waitForCompletionBeforeNext = false)
             where T : class, ICommand
         {
-            _config._multipleHandlersTypes.Add(new MultipleCommandHandlerConf
+            _config._multipleHandlersTypes.Add(new MultipleCommandHandlerConf(typeof(T))
             {
-                CommandType = typeof(T),
                 ShouldWait = waitForCompletionBeforeNext
             });
             return this;

@@ -3,10 +3,10 @@ using Autofac.Builder;
 using CQELight.Abstractions.IoC.Interfaces;
 using CQELight.IoC;
 using CQELight.IoC.Autofac;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CQELight
 {
@@ -17,8 +17,8 @@ namespace CQELight
         /// <summary>
         /// Configure the bootstrapper to use Autofac as IoC.
         /// </summary>
-        /// <param name="bootstrapper">Instance of boostrapper.</param>
-        /// <param name="containerBuilder">Autofac containerbuilder that has been configured according to app..</param>
+        /// <param name="bootstrapper">Instance of bootstrapper.</param>
+        /// <param name="containerBuilder">Autofac container builder that has been configured according to app..</param>
         /// <param name="excludedAutoRegisterTypeDLLs">DLLs name to exclude from auto-configuration into IoC
         /// (IAutoRegisterType will be ineffective).</param>
         public static Bootstrapper UseAutofacAsIoC(this Bootstrapper bootstrapper, ContainerBuilder containerBuilder,
@@ -30,7 +30,7 @@ namespace CQELight
             }
             var service = new AutofacBootstrappService
             {
-                BootstrappAction = (ctx) => CreateConfigWithContainer(bootstrapper, containerBuilder, excludedAutoRegisterTypeDLLs)
+                BootstrappAction = (_) => CreateConfigWithContainer(bootstrapper, containerBuilder, excludedAutoRegisterTypeDLLs)
             };
             bootstrapper.AddService(service);
             return bootstrapper;
@@ -40,7 +40,7 @@ namespace CQELight
         /// Configure the bootstrapper to use Autofac as IoC, without custom registrations.
         /// Only system and plugin registrations will be added.
         /// </summary>
-        /// <param name="bootstrapper">Instance of boostrapper.</param>
+        /// <param name="bootstrapper">Instance of bootstrapper.</param>
         /// <param name="excludedAutoRegisterTypeDLLs">DLLs name to exclude from auto-configuration into IoC
         /// (IAutoRegisterType will be ineffective).</param>
         public static Bootstrapper UseAutofacAsIoC(this Bootstrapper bootstrapper, params string[] excludedAutoRegisterTypeDLLs)
@@ -49,7 +49,7 @@ namespace CQELight
         /// <summary>
         /// Configure the bootstrapper to use Autofac as IoC.
         /// </summary>
-        /// <param name="bootstrapper">Instance of boostrapper.</param>
+        /// <param name="bootstrapper">Instance of bootstrapper.</param>
         /// <param name="containerBuilderConfiguration">Configuration to apply on freshly created container builder.</param>
         /// <param name="excludedAutoRegisterTypeDLLs">DLLs name to exclude from auto-configuration into IoC
         /// (IAutoRegisterType will be ineffective).</param>
@@ -58,10 +58,7 @@ namespace CQELight
         {
             var service = new AutofacBootstrappService
             {
-                BootstrappAction = (ctx) =>
-                {
-                    ConfigureAutofacContainer(bootstrapper, containerBuilderConfiguration, excludedAutoRegisterTypeDLLs);
-                }
+                BootstrappAction = (_) => ConfigureAutofacContainer(bootstrapper, containerBuilderConfiguration, excludedAutoRegisterTypeDLLs)
             };
             bootstrapper.AddService(service);
             return bootstrapper;
@@ -73,7 +70,7 @@ namespace CQELight
         /// BEWARE : The scope should be kept alive in order to allow the system to work,
         /// because if it's disposed, you will not be able to use CQELight IoC.
         /// </summary>
-        /// <param name="bootstrapper">Instance of boostrapper.</param>
+        /// <param name="bootstrapper">Instance of bootstrapper.</param>
         /// <param name="scope">Scope instance</param>
         /// <param name="excludedAutoRegisterTypeDLLs">DLLs name to exclude from auto-configuration into IoC
         /// (IAutoRegisterType will be ineffective).</param>
@@ -83,7 +80,7 @@ namespace CQELight
         {
             var service = new AutofacBootstrappService
             {
-                BootstrappAction = (ctx) =>
+                BootstrappAction = (_) =>
                 {
                     var childScope =
                         scope.BeginLifetimeScope(cb => AddRegistrationsToContainerBuilder(bootstrapper, cb, excludedAutoRegisterTypeDLLs));
@@ -115,92 +112,107 @@ namespace CQELight
         private static void CreateConfigWithContainer(Bootstrapper bootstrapper, ContainerBuilder containerBuilder, string[] excludedAutoRegisterTypeDLLs)
         {
             AddRegistrationsToContainerBuilder(bootstrapper, containerBuilder, excludedAutoRegisterTypeDLLs);
-            InitDIManagerAndCreateScopeFactory(containerBuilder.Build());
+            var container = containerBuilder.Build();
+            AutofacScopeFactory.AutofacContainer = container;
+            InitDIManagerAndCreateScopeFactory(container);
         }
 
         private static void InitDIManagerAndCreateScopeFactory(ILifetimeScope scope)
         {
-            var factory = new AutofacScopeFactory(scope);
+            var loggerFactory = scope.ResolveOptional<ILoggerFactory>();
+            var factory = loggerFactory != null ? new AutofacScopeFactory(scope, loggerFactory) : new AutofacScopeFactory(scope);
             DIManager.Init(factory);
         }
 
         private static void AddRegistrationsToContainerBuilder(Bootstrapper bootstrapper, ContainerBuilder containerBuilder, string[] excludedAutoRegisterTypeDLLs)
         {
-
             containerBuilder.RegisterModule(new AutoRegisterModule(excludedAutoRegisterTypeDLLs));
-            AddComponentRegistrationToContainer(containerBuilder, bootstrapper.IoCRegistrations);
-            containerBuilder.Register(c => AutofacScopeFactory.Instance).AsImplementedInterfaces();
+            AddComponentRegistrationToContainer(containerBuilder, bootstrapper.IoCRegistrations.ToList());
+            containerBuilder
+                .Register(c =>
+                {
+                    var loggerFactory = c.ResolveOptional<ILoggerFactory>();
+                    if (loggerFactory != null)
+                    {
+                        return new AutofacScopeFactory(AutofacScopeFactory.AutofacContainer!, loggerFactory);
+                    }
+                    return new AutofacScopeFactory(AutofacScopeFactory.AutofacContainer!);
+                })
+                .AsSelf()
+                .AsImplementedInterfaces();
         }
 
-        private static void AddComponentRegistrationToContainer(ContainerBuilder containerBuilder, IEnumerable<ITypeRegistration> customRegistration)
+        private static void AddComponentRegistrationToContainer(ContainerBuilder containerBuilder, List<ITypeRegistration> customRegistration)
         {
-            if (customRegistration?.Any() == false)
+            if (customRegistration == null || customRegistration.Count == 0)
             {
                 return;
             }
-            var fullCtorFinder = new FullConstructorFinder();
             foreach (var item in customRegistration)
             {
-                if (item is InstanceTypeRegistration instanceTypeRegistration)
+                switch (item)
                 {
-                    AddLifetime(
-                        containerBuilder
-                            .Register(c => instanceTypeRegistration.Value)
-                            .As(instanceTypeRegistration.AbstractionTypes.ToArray()),
-                        instanceTypeRegistration.Lifetime);
-
-                }
-                else if (item is TypeRegistration typeRegistration)
-                {
-                    foreach (var serviceType in typeRegistration.AbstractionTypes)
-                    {
-                        if (serviceType.IsGenericTypeDefinition)
+                    case InstanceTypeRegistration instanceTypeRegistration:
+                        AddLifetime(
+                            containerBuilder
+                                .Register(_ => instanceTypeRegistration.Value)
+                                .As(instanceTypeRegistration.AbstractionTypes.ToArray()),
+                            instanceTypeRegistration.Lifetime);
+                        break;
+                    case TypeRegistration typeRegistration:
                         {
-                            var registration = containerBuilder
-                                    .RegisterGeneric(typeRegistration.InstanceType)
-                                    .As(serviceType);
-                            if (typeRegistration.Mode == TypeResolutionMode.Full)
+                            foreach (var serviceType in typeRegistration.AbstractionTypes)
                             {
-                                registration = registration.FindConstructorsWith(new FullConstructorFinder());
-                            }
-                            AddLifetime(registration, typeRegistration.Lifetime);
-                        }
-                        else
-                        {
-                            var registration = containerBuilder
-                                    .RegisterType(typeRegistration.InstanceType)
-                                    .As(serviceType);
-                            if (typeRegistration.Mode == TypeResolutionMode.Full)
-                            {
-                                registration = registration.FindConstructorsWith(new FullConstructorFinder());
-                            }
-                            AddLifetime(registration, typeRegistration.Lifetime);
-                        }
-                    }
-                }
-                else if (item is FactoryRegistration factoryRegistration)
-                {
-                    AddLifetime(
-                        containerBuilder
-                            .Register(c =>
-                            {
-                                if (factoryRegistration.Factory != null)
+                                if (serviceType.IsGenericTypeDefinition)
                                 {
-                                    return factoryRegistration.Factory.Invoke();
+                                    var registration = containerBuilder
+                                        .RegisterGeneric(typeRegistration.InstanceType)
+                                        .As(serviceType);
+                                    if (typeRegistration.Mode == TypeResolutionMode.Full)
+                                    {
+                                        registration = registration.FindConstructorsWith(new FullConstructorFinder());
+                                    }
+                                    AddLifetime(registration, typeRegistration.Lifetime);
                                 }
-                                else if (factoryRegistration.ScopedFactory != null)
+                                else
                                 {
-                                    return factoryRegistration.ScopedFactory.Invoke(new AutofacScope(c));
+                                    var registration = containerBuilder
+                                        .RegisterType(typeRegistration.InstanceType)
+                                        .As(serviceType);
+                                    if (typeRegistration.Mode == TypeResolutionMode.Full)
+                                    {
+                                        registration = registration.FindConstructorsWith(new FullConstructorFinder());
+                                    }
+                                    AddLifetime(registration, typeRegistration.Lifetime);
                                 }
-                                throw new InvalidOperationException("FactoryRegistration has not been correctly configured (both Factory and ScopedFactory are null).");
-                            })
-                            .As(factoryRegistration.AbstractionTypes.ToArray()),
-                        factoryRegistration.Lifetime);
+                            }
+                            break;
+                        }
+                    case FactoryRegistration factoryRegistration:
+                        AddLifetime(
+                            containerBuilder
+                                .Register(c =>
+                                {
+                                    if (factoryRegistration.Factory != null)
+                                    {
+                                        return factoryRegistration.Factory.Invoke();
+                                    }
+                                    else if (factoryRegistration.ScopedFactory != null)
+                                    {
+                                        return factoryRegistration.ScopedFactory.Invoke(new AutofacScope(c));
+                                    }
+                                    throw new InvalidOperationException("FactoryRegistration has not been correctly configured (both Factory and ScopedFactory are null).");
+                                })
+                                .As(factoryRegistration.AbstractionTypes.ToArray()),
+                            factoryRegistration.Lifetime);
+                        break;
                 }
             }
         }
 
-        private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> AddLifetime<TLimit, TActivatorData, TRegistrationStyle>(IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, RegistrationLifetime lifetime)
+        private static void AddLifetime<TLimit, TActivatorData, TRegistrationStyle>(
+            IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration,
+            RegistrationLifetime lifetime)
         {
             switch (lifetime)
             {
@@ -210,8 +222,11 @@ namespace CQELight
                 case RegistrationLifetime.Singleton:
                     registration.SingleInstance();
                     break;
+                case RegistrationLifetime.Transient:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(lifetime), lifetime, $"Specified lifetime {lifetime} is unknown");
             }
-            return registration;
         }
 
         #endregion

@@ -2,8 +2,6 @@
 using CQELight.EventStore.EFCore.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.EventStore.EFCore
 {
@@ -12,13 +10,12 @@ namespace CQELight.EventStore.EFCore
     /// </summary>
     public class EFEventStoreOptions
     {
-
         #region Properties
 
         /// <summary>
         /// Instance of snapshot behavior provider.
         /// </summary>
-        public ISnapshotBehaviorProvider SnapshotBehaviorProvider { get; }
+        public ISnapshotBehaviorProvider? SnapshotBehaviorProvider { get; }
         /// <summary>
         /// Options for DbContext configuration.
         /// </summary>
@@ -28,14 +25,14 @@ namespace CQELight.EventStore.EFCore
         /// </summary>
         public BufferInfo BufferInfo { get; }
         /// <summary>
-        /// Event archive behavior to apply when generating 
+        /// Event archive behavior to apply when generating
         /// snapshot.
         /// </summary>
         public SnapshotEventsArchiveBehavior ArchiveBehavior { get; }
         /// <summary>
         /// DbContext options for archive behavior.
         /// </summary>
-        public DbContextOptions<ArchiveEventStoreDbContext> ArchiveDbContextOptions { get; }
+        public DbContextOptions<ArchiveEventStoreDbContext>? ArchiveDbContextOptions { get; }
 
         #endregion
 
@@ -54,10 +51,10 @@ namespace CQELight.EventStore.EFCore
         /// </param>
         public EFEventStoreOptions(
             Action<DbContextOptionsBuilder<EventStoreDbContext>> mainDbContextOptionsBuilderCfg,
-            ISnapshotBehaviorProvider snapshotBehaviorProvider = null,
-            BufferInfo bufferInfo = null,
+            ISnapshotBehaviorProvider? snapshotBehaviorProvider = null,
+            BufferInfo? bufferInfo = null,
             SnapshotEventsArchiveBehavior? archiveBehavior = null,
-            Action<DbContextOptionsBuilder<ArchiveEventStoreDbContext>> archiveDbContextOptionsBuilderCfg = null)
+            Action<DbContextOptionsBuilder<ArchiveEventStoreDbContext>>? archiveDbContextOptionsBuilderCfg = null)
         {
             if (mainDbContextOptionsBuilderCfg == null)
             {
@@ -80,7 +77,6 @@ namespace CQELight.EventStore.EFCore
                 archiveDbContextOptionsBuilderCfg(archiveDbContextOptionsBuilder);
                 ArchiveBehavior = archiveBehavior.Value;
                 ArchiveDbContextOptions = archiveDbContextOptionsBuilder.Options;
-                
             }
         }
 

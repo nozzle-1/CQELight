@@ -1,13 +1,9 @@
 ﻿using CQELight.Abstractions.CQS.Interfaces;
 using CQELight.Abstractions.Dispatcher.Interfaces;
 using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Abstractions.IoC.Interfaces;
 using CQELight.Abstractions.Saga.Interfaces;
 using CQELight.Dispatcher;
-using CQELight.Tools.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CQELight.Abstractions.Saga
@@ -21,7 +17,7 @@ namespace CQELight.Abstractions.Saga
     {
         #region Members
 
-        private readonly IDispatcher _dispatcher;
+        private readonly IDispatcher? _dispatcher;
 
         #endregion
 
@@ -35,7 +31,7 @@ namespace CQELight.Abstractions.Saga
         /// <summary>
         /// Saga's data.
         /// </summary>
-        public TData Data { get; protected set; }
+        public TData? Data { get; protected set; }
 
         /// <summary>
         /// Completion indicator.

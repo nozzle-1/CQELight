@@ -1,17 +1,14 @@
 ﻿using CQELight.Abstractions.IoC.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.IoC.Microsoft.Extensions.DependencyInjection
 {
-    class MicrosoftScopeFactory : IScopeFactory
+    internal class MicrosoftScopeFactory : IScopeFactory
     {
-
         #region Members
 
-        private readonly ServiceProvider serviceProvider;
+        private readonly IServiceProvider serviceProvider;
         private readonly IServiceCollection services;
 
         #endregion
@@ -22,6 +19,11 @@ namespace CQELight.IoC.Microsoft.Extensions.DependencyInjection
         {
             serviceProvider = services.BuildServiceProvider();
             this.services = services;
+        }
+
+        public MicrosoftScopeFactory(IServiceProvider serviceProvider)
+        {
+            this.serviceProvider = serviceProvider;
         }
 
         #endregion

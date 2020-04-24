@@ -1,8 +1,5 @@
 ﻿using CQELight.Abstractions.IoC.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.AspCore.Internal
 {

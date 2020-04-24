@@ -5,15 +5,12 @@ using CQELight.Abstractions.DDD;
 using CQELight.Abstractions.Events;
 using CQELight.Abstractions.Events.Interfaces;
 using CQELight.Abstractions.IoC.Interfaces;
-using CQELight.Bootstrapping.Notifications;
 using CQELight.IoC.Attributes;
+using CQELight.IoC.Exceptions;
 using CQELight.TestFramework;
 using FluentAssertions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -537,6 +534,18 @@ namespace CQELight.IoC.Autofac.Integration.Tests
                 var result2 = s.Resolve<ICommandHandler<CommandAutoReg>>();
                 result2.Should().NotBeNull();
             }
+        }
+
+        #endregion
+
+        #region ResolveRequired
+
+        [Fact]
+        public void ResolveRequired_Should_Throws_IfTypeIsNotRegistered()
+        {
+            var scope = new AutofacScope(new ContainerBuilder().Build());
+            Assert.Throws<IoCResolutionException>(() => scope.ResolveRequired<ParameterTestClass>());
+            Assert.Throws<IoCResolutionException>(() => scope.ResolveRequired(typeof(ParameterTestClass)));
         }
 
         #endregion

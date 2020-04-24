@@ -1,8 +1,5 @@
 ﻿using CQELight.Abstractions.CQS.Interfaces;
-using CQELight.Abstractions.DDD;
 using CQELight.Abstractions.Events;
-using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Abstractions.IoC.Interfaces;
 using CQELight.Buses.InMemory.Commands;
 using CQELight.Buses.InMemory.Events;
 using CQELight.Buses.RabbitMQ.Common;
@@ -17,7 +14,6 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -250,7 +246,7 @@ namespace CQELight.Buses.RabbitMQ.Integration.Tests
 
                 networkInfos.ServiceQueueDescriptions.Add(new RabbitQueueDescription("MyCustomQueue")
                 {
-                    Bindings = new System.Collections.Generic.List<RabbitQueueBindingDescription>
+                    Bindings = new List<RabbitQueueBindingDescription>
                     {
                        new RabbitQueueBindingDescription("MyCustomExchange")
                     }

@@ -1,8 +1,5 @@
 ﻿using CQELight.Abstractions.Events.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
 
 namespace CQELight.Buses.InMemory.Events
 {
@@ -38,7 +35,7 @@ namespace CQELight.Buses.InMemory.Events
         /// </summary>
         /// <param name="callback">Callback method</param>
         /// <returns>Current configuration builder.</returns>
-        public InMemoryEventBusConfigurationBuilder DefineErrorCallback(Action<IDomainEvent, IEventContext> callback)
+        public InMemoryEventBusConfigurationBuilder DefineErrorCallback(Action<IDomainEvent, IEventContext?> callback)
         {
             _config.OnFailedDelivery = callback;
             return this;
@@ -55,9 +52,9 @@ namespace CQELight.Buses.InMemory.Events
         {
             _config._ifClauses.Add(typeof(T), x =>
             {
-                if (x is T)
+                if (x is T xAsT)
                 {
-                    return ifClause(x as T);
+                    return ifClause(xAsT);
                 }
                 return false;
             });
@@ -66,7 +63,7 @@ namespace CQELight.Buses.InMemory.Events
         }
 
         /// <summary>
-        /// Remove thread safety between event handlers for a specific event, which mean 
+        /// Remove thread safety between event handlers for a specific event, which mean
         /// that all event handlers will be launch simultaneously.
         /// </summary>
         /// <typeparam name="T">Type of event to allow parallel handling.</typeparam>
@@ -79,7 +76,7 @@ namespace CQELight.Buses.InMemory.Events
         }
 
         /// <summary>
-        /// Remove thread safety between event handlers for some specific event types, which mean 
+        /// Remove thread safety between event handlers for some specific event types, which mean
         /// that all event handlers will be launch simultaneously.
         /// </summary>
         /// <param name="types">Collection of type that allow parallel handling.</param>

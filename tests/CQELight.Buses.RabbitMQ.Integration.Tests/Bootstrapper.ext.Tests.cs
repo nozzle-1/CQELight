@@ -1,14 +1,9 @@
 ﻿using CQELight.Buses.RabbitMQ.Client;
-using CQELight.Buses.RabbitMQ.Publisher;
 using CQELight.Buses.RabbitMQ.Server;
-using CQELight.Buses.RabbitMQ.Subscriber;
 using CQELight.IoC;
 using CQELight.TestFramework;
 using FluentAssertions;
 using RabbitMQ.Client;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace CQELight.Buses.RabbitMQ.Integration.Tests

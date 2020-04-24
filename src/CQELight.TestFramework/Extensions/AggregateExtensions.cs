@@ -1,7 +1,5 @@
 ﻿using CQELight.Abstractions.DDD;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.TestFramework.Extensions
 {
@@ -10,7 +8,6 @@ namespace CQELight.TestFramework.Extensions
     /// </summary>
     public static class AggregateExtensions
     {
-
         #region Public static methods
 
         /// <summary>
@@ -20,7 +17,7 @@ namespace CQELight.TestFramework.Extensions
         /// <param name="aggregate">Instance of aggregate.</param>
         public static void ClearDomainEvents<T>(this AggregateRoot<T> aggregate)
         {
-            if (aggregate == null)
+            if (aggregate is null)
             {
                 throw new ArgumentNullException(nameof(aggregate));
             }

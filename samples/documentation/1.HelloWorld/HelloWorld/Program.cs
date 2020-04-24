@@ -1,10 +1,7 @@
 ﻿using CQELight;
-using CQELight.Abstractions.Events.Interfaces;
 using CQELight.Dispatcher;
-using CQELight.Tools;
 using HelloWorld.Events;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace HelloWorld

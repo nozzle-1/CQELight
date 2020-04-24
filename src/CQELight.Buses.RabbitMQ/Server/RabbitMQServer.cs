@@ -1,6 +1,5 @@
 ﻿using CQELight.Abstractions.Events.Interfaces;
 using CQELight.Buses.InMemory.Events;
-using CQELight.Buses.RabbitMQ.Extensions;
 using CQELight.Tools;
 using CQELight.Tools.Extensions;
 using Microsoft.Extensions.Logging;
@@ -25,9 +24,9 @@ namespace CQELight.Buses.RabbitMQ.Server
         private readonly ILogger _logger;
         private readonly RabbitMQServerConfiguration _config;
         private List<EventingBasicConsumer> _consumers = new List<EventingBasicConsumer>();
-        private IConnection _connection;
-        private IModel _channel;
-        private readonly InMemoryEventBus _inMemoryEventBus;
+        private IConnection? _connection;
+        private IModel? _channel;
+        private readonly InMemoryEventBus? _inMemoryEventBus;
 
         #endregion
 
@@ -35,8 +34,8 @@ namespace CQELight.Buses.RabbitMQ.Server
 
         internal RabbitMQServer(
             ILoggerFactory loggerFactory,
-            RabbitMQServerConfiguration config = null,
-            InMemoryEventBus inMemoryEventBus = null)
+            RabbitMQServerConfiguration? config = null,
+            InMemoryEventBus? inMemoryEventBus = null)
         {
             if (loggerFactory == null)
             {
@@ -119,11 +118,11 @@ namespace CQELight.Buses.RabbitMQ.Server
 
         private async void OnEventReceived(object model, BasicDeliverEventArgs args)
         {
-            if (args.Body?.Any() == true && model is EventingBasicConsumer consumer)
+            if (!args.Body.IsEmpty && model is EventingBasicConsumer consumer)
             {
                 try
                 {
-                    var dataAsStr = Encoding.UTF8.GetString(args.Body);
+                    var dataAsStr = Encoding.UTF8.GetString(args.Body.ToArray());
                     var enveloppe = dataAsStr.FromJson<Enveloppe>();
                     if (enveloppe != null)
                     {
@@ -139,10 +138,18 @@ namespace CQELight.Buses.RabbitMQ.Server
                                 if (objType.GetInterfaces().Any(i => i.Name == nameof(IDomainEvent)))
                                 {
                                     var evt = _config.QueueConfiguration.Serializer.DeserializeEvent(enveloppe.Data, objType);
-                                    _config.QueueConfiguration.Callback?.Invoke(evt);
-                                    if (_config.QueueConfiguration.DispatchInMemory && _inMemoryEventBus != null)
+                                    if (evt != null)
                                     {
-                                        await _inMemoryEventBus.PublishEventAsync(evt).ConfigureAwait(false);
+                                        _config.QueueConfiguration.Callback?.Invoke(evt);
+                                        if (_config.QueueConfiguration.DispatchInMemory && _inMemoryEventBus != null)
+                                        {
+                                            await _inMemoryEventBus.PublishEventAsync(evt).ConfigureAwait(false);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        _logger.LogWarning("An event has been received by RabbitMQ and cannot be deserialized. " +
+                                            $"Envelope data : {enveloppe.Data}");
                                     }
                                     consumer.Model.BasicAck(args.DeliveryTag, false);
                                 }
@@ -170,8 +177,8 @@ namespace CQELight.Buses.RabbitMQ.Server
         {
             try
             {
-                _channel.Dispose();
-                _channel.Dispose();
+                _channel?.Dispose();
+                _connection?.Dispose();
                 _consumers.DoForEach(c => c.Received -= OnEventReceived);
                 _consumers.Clear();
             }

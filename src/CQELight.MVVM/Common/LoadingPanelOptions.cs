@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.MVVM.Common
+﻿namespace CQELight.MVVM.Common
 {
     /// <summary>
     /// Options for loading panel displayer.
     /// </summary>
     public class LoadingPanelOptions
     {
-
         #region Properties
 
         /// <summary>
@@ -19,7 +14,7 @@ namespace CQELight.MVVM.Common
         /// <summary>
         /// An error message
         /// </summary>
-        public string TimeoutErrorMessage { get; set; }
+        public string TimeoutErrorMessage { get; set; } = "";
 
         #endregion
 

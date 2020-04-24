@@ -1,9 +1,5 @@
-﻿using CQELight.Abstractions.DDD;
-using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Abstractions.EventStore;
+﻿using CQELight.Abstractions.EventStore;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight_Benchmarks.Models
 {

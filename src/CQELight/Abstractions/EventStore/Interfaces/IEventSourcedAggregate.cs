@@ -1,7 +1,5 @@
 ﻿using CQELight.Abstractions.Events.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Abstractions.EventStore.Interfaces
 {
@@ -17,6 +15,5 @@ namespace CQELight.Abstractions.EventStore.Interfaces
         /// </summary>
         /// <param name="events">Events used to recreate the state.</param>
         void RehydrateState(IEnumerable<IDomainEvent> events);
-
     }
 }

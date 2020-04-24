@@ -4,9 +4,6 @@ using CQELight.MVVM.Interfaces;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,13 +18,16 @@ namespace CQELight.MVVM.MahApps
     {
         #region Members
 
-        private ProgressDialogController _progressAwaiter;
-        private CancellationTokenSource _showLoadingCancel;
+        private ProgressDialogController? _progressAwaiter;
+        private CancellationTokenSource? _showLoadingCancel;
 
         #endregion
 
         #region Ctor
 
+        /// <summary>
+        /// Creates a new instance of <see cref="CQEMetroWindow"/>
+        /// </summary>
         public CQEMetroWindow()
         {
             Loaded += async (s, e) =>
@@ -62,7 +62,7 @@ namespace CQELight.MVVM.MahApps
                 await Application.Current.Dispatcher.Invoke(async () => await _progressAwaiter.CloseAsync().ConfigureAwait(false)).ConfigureAwait(false);
                 try
                 {
-                    if (_showLoadingCancel != null && !_showLoadingCancel.IsCancellationRequested)
+                    if (_showLoadingCancel?.IsCancellationRequested == false)
                     {
                         _showLoadingCancel.Cancel();
                     }
@@ -78,9 +78,15 @@ namespace CQELight.MVVM.MahApps
             => Application.Current.Dispatcher.Invoke(Hide);
 
         public void PerformOnUIThread(Action act)
-            => Application.Current.Dispatcher.Invoke(act);
+        {
+            if (act is null)
+            {
+                throw new ArgumentNullException(nameof(act));
+            }
+            Application.Current.Dispatcher.Invoke(act);
+        }
 
-        public Task ShowAlertAsync(string title, string message, MessageDialogServiceOptions options = null)
+        public Task ShowAlertAsync(string title, string message, MessageDialogServiceOptions? options = null)
             => Application.Current.Dispatcher.Invoke(async () =>
                 {
                     await this.ShowMessageAsync(title, message, MessageDialogStyle.Affirmative, new MetroDialogSettings
@@ -89,7 +95,7 @@ namespace CQELight.MVVM.MahApps
                     }).ConfigureAwait(false);
                 });
 
-        public Task ShowLoadingPanelAsync(string waitMessage, LoadingPanelOptions options = null)
+        public Task ShowLoadingPanelAsync(string waitMessage, LoadingPanelOptions? options = null)
         {
             Application.Current.Dispatcher.Invoke(async () =>
             {
@@ -98,7 +104,6 @@ namespace CQELight.MVVM.MahApps
                 {
                     try
                     {
-
                         _showLoadingCancel = new CancellationTokenSource();
 #pragma warning disable CS4014
                         Task.Delay(Convert.ToInt32(options.Timeout), _showLoadingCancel.Token).ContinueWith(async a =>
@@ -137,7 +142,7 @@ namespace CQELight.MVVM.MahApps
         public void ShowView()
             => Application.Current.Dispatcher.Invoke(Show);
 
-        public async Task<bool> ShowYesNoDialogAsync(string title, string message, MessageDialogServiceOptions options = null)
+        public async Task<bool> ShowYesNoDialogAsync(string title, string message, MessageDialogServiceOptions? options = null)
         {
             var settings = new MetroDialogSettings();
             if (options?.ShowCancel == true)
@@ -152,7 +157,7 @@ namespace CQELight.MVVM.MahApps
                 {
                     result = true;
                 }
-                else if (msgBoxResult == MessageDialogResult.FirstAuxiliary && options.ShowCancel && options.CancelCallback != null)
+                else if (msgBoxResult == MessageDialogResult.FirstAuxiliary && options?.ShowCancel == true && options.CancelCallback != null)
                 {
                     options.CancelCallback();
                 }

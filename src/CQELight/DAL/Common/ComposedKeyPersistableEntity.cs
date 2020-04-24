@@ -2,10 +2,8 @@
 using CQELight.DAL.Exceptions;
 using CQELight.Tools.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace CQELight.DAL.Common
 {
@@ -20,7 +18,7 @@ namespace CQELight.DAL.Common
         /// Retrieve the composed key value.
         /// </summary>
         /// <returns>Composed key value.</returns>
-        public override object GetKeyValue()
+        public override object? GetKeyValue()
         {
             var entityType = GetType();
             var composedKeyAttr = entityType.GetCustomAttribute<ComposedKeyAttribute>();
@@ -30,7 +28,7 @@ namespace CQELight.DAL.Common
                 if (keyProps != null)
                 {
                     var values = keyProps.Select(p => p.GetValue(this)).WhereNotNull();
-                    if (values != null && values.Any())
+                    if (values?.Any() == true)
                     {
                         return string.Join(",", keyProps.Select(p => p.GetValue(this)));
                     }
@@ -55,7 +53,7 @@ namespace CQELight.DAL.Common
                 {
                     foreach (var key in keyProps)
                     {
-                        object defaultValue = null;
+                        object? defaultValue = null;
                         if (key.PropertyType.IsValueType)
                         {
                             defaultValue = key.PropertyType.CreateInstance();

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CQELight.Abstractions.DDD
@@ -10,7 +8,6 @@ namespace CQELight.Abstractions.DDD
     /// </summary>
     public class Result
     {
-
         #region Properties
 
         /// <summary>
@@ -153,5 +150,4 @@ namespace CQELight.Abstractions.DDD
         #endregion
 
     }
-
 }

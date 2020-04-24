@@ -1,5 +1,4 @@
-﻿using CQELight.DAL.Attributes;
-using CQELight.DAL.Common;
+﻿using CQELight.DAL.Common;
 using CQELight.DAL.MongoDb.Mapping;
 using CQELight.Tools;
 using CQELight.Tools.Extensions;
@@ -8,20 +7,39 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using CQELight.DAL.MongoDb.Extensions;
 using CQELight.Abstractions.DAL.Interfaces;
 
 namespace CQELight.DAL.MongoDb.Adapters
 {
-    class MongoDataReaderAdapter : DisposableObject, IDataReaderAdapter
+    /// <summary>
+    /// Data-reading adapter to use with MongoDb.
+    /// </summary>
+    public class MongoDataReaderAdapter : DisposableObject, IDataReaderAdapter
     {
+        #region Ctor
+
+        /// <summary>
+        /// Creates a new instance of <see cref="MongoDataReaderAdapter"/>.
+        /// </summary>
+        public MongoDataReaderAdapter()
+        {
+            if (MongoDbContext.MongoClient == null)
+            {
+                throw new InvalidOperationException("MongoDbClient hasn't been initialized yet. Please, ensure that you've bootstrapped extension before attempting creating a new instance of MongoDataWriterAdapter");
+            }
+        }
+
+        #endregion
+
         #region IDataReaderAdapter
 
 #if NETSTANDARD2_0
-        public IAsyncEnumerable<T> GetAsync<T>(Expression<Func<T, bool>> filter = null, Expression<Func<T, object>> orderBy = null, bool includeDeleted = false)
+        public IAsyncEnumerable<T> GetAsync<T>(Expression<Func<T, bool>>? filter = null, Expression<Func<T, object>>? orderBy = null, bool includeDeleted = false)
+#elif NETSTANDARD2_1
+        public async IAsyncEnumerable<T> GetAsync<T>(Expression<Func<T, bool>>? filter = null, Expression<Func<T, object>>? orderBy = null, bool includeDeleted = false)
+#endif
             where T : class
         {
             var collection = GetCollection<T>();
@@ -37,43 +55,22 @@ namespace CQELight.DAL.MongoDb.Adapters
             }
             var result = collection
                 .Find(new FilterDefinitionBuilder<T>().And(whereFilter, deletedFilter));
-            IOrderedFindFluent<T, T> sortedResult = null;
+            IOrderedFindFluent<T, T>? sortedResult = null;
             if (orderBy != null)
             {
                 sortedResult = result.SortBy(orderBy);
             }
+#if NETSTANDARD2_0
             return (sortedResult ?? result)
                 .ToEnumerable()
                 .ToAsyncEnumerable();
-        }
 #elif NETSTANDARD2_1
-         public async IAsyncEnumerable<T> GetAsync<T>(Expression<Func<T, bool>> filter = null, Expression<Func<T, object>> orderBy = null, bool includeDeleted = false)
-            where T : class
-        {
-            var collection = GetCollection<T>();
-            FilterDefinition<T> whereFilter = FilterDefinition<T>.Empty;
-            FilterDefinition<T> deletedFilter = FilterDefinition<T>.Empty;
-            if (filter != null)
-            {
-                whereFilter = new FilterDefinitionBuilder<T>().Where(filter);
-            }
-            if (!includeDeleted && typeof(T).IsInHierarchySubClassOf(typeof(BasePersistableEntity)))
-            {
-                deletedFilter = new FilterDefinitionBuilder<T>().Eq("Deleted", false);
-            }
-            var result = collection
-                .Find(new FilterDefinitionBuilder<T>().And(whereFilter, deletedFilter));
-            IOrderedFindFluent<T, T> sortedResult = null;
-            if (orderBy != null)
-            {
-                sortedResult = result.SortBy(orderBy);
-            }
-            foreach (var item in await (sortedResult ?? result).ToListAsync())
+            foreach (var item in await (sortedResult ?? result).ToListAsync().ConfigureAwait(false))
             {
                 yield return item;
-            } 
-        }
+            }
 #endif
+        }
 
         public async Task<T> GetByIdAsync<T>(object value) where T : class
         {

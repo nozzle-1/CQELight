@@ -1,9 +1,5 @@
-﻿using CQELight.Abstractions.CQS.Interfaces;
-using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Events.Serializers;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Buses.RabbitMQ.Network
 {
@@ -45,7 +41,7 @@ namespace CQELight.Buses.RabbitMQ.Network
         public bool Exclusive { get; set; } = false;
 
         /// <summary>
-        /// Flag that indicates if queue is autodelete, meaning queue is deleted when there's no subscriber anymore. 
+        /// Flag that indicates if queue is autodelete, meaning queue is deleted when there's no subscriber anymore.
         /// </summary>
         public bool AutoDelete { get; set; } = false;
 
@@ -58,7 +54,7 @@ namespace CQELight.Buses.RabbitMQ.Network
         /// Collection of bindings for this specific queue.
         /// </summary>
         public List<RabbitQueueBindingDescription> Bindings { get; set; } = new List<RabbitQueueBindingDescription>();
-        
+
         #endregion
 
         #region Ctor

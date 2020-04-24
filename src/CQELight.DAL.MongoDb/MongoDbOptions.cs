@@ -3,7 +3,6 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CQELight.DAL.MongoDb
 {
@@ -17,18 +16,18 @@ namespace CQELight.DAL.MongoDb
         /// <summary>
         /// URL to connect to Mongo server.
         /// </summary>
-        public MongoUrl Url { get; private set; }
+        public MongoUrl Url { get; }
 
         /// <summary>
         /// Collection of custom serializers
         /// </summary>
-        public IEnumerable<IBsonSerializer> CustomSerializers { get; set; }
+        public IEnumerable<IBsonSerializer> CustomSerializers { get; set; } = Enumerable.Empty<IBsonSerializer>();
 
         /// <summary>
         /// Name of used database.
         /// If not set by user, "DefaultDatabase" is used
         /// </summary>
-        public string DatabaseName { get; private set; } = "DefaultDatabase";
+        public string DatabaseName { get; } = "DefaultDatabase";
 
         #endregion
 
@@ -45,7 +44,6 @@ namespace CQELight.DAL.MongoDb
                 Servers = serversUrls.Select(u => new MongoServerAddress(u))
             }.ToMongoUrl())
         {
-
         }
 
         /// <summary>
@@ -58,7 +56,6 @@ namespace CQELight.DAL.MongoDb
                 Servers = serversUrls
             }.ToMongoUrl())
         {
-
         }
 
         /// <summary>
@@ -76,7 +73,6 @@ namespace CQELight.DAL.MongoDb
                 Password = password
             }.ToMongoUrl())
         {
-
         }
 
         /// <summary>
@@ -93,7 +89,6 @@ namespace CQELight.DAL.MongoDb
                 Password = password
             }.ToMongoUrl())
         {
-
         }
 
         /// <summary>
@@ -115,16 +110,27 @@ namespace CQELight.DAL.MongoDb
         }
 
         /// <summary>
-        /// Initializes a new <see cref="MongoDbOptions"/> instances with fully qualified URL.
+        /// Initializes a new <see cref="MongoDbOptions"/> instances with fully qualified Mongo URL.
         /// </summary>
         /// <param name="url">URL to connect to Mongo</param>
         public MongoDbOptions(MongoUrl url)
         {
             Url = url ?? throw new ArgumentNullException(nameof(url));
-            if (!string.IsNullOrWhiteSpace(Url.DatabaseName))
+        }
+
+        /// <summary>
+        /// Initializes a new <see cref="MongoDbOptions"/> instances with fully qualified Mongo URL on a specific Database.
+        /// </summary>
+        /// <param name="url">URL to connect to Mongo</param>
+        /// <param name="database">Database to use</param>
+        public MongoDbOptions(MongoUrl url, string database)
+        {
+            if (string.IsNullOrWhiteSpace(database))
             {
-                DatabaseName = Url.DatabaseName;
+                database = "DefaultDatabase";
             }
+            Url = url ?? throw new ArgumentNullException(nameof(url));
+            DatabaseName = database;
         }
 
         #endregion

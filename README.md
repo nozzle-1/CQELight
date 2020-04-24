@@ -1,10 +1,12 @@
 # CQELight
 
+Documentation is available at : https://cqelight.readthedocs.io
+
 [![Build Status](https://dev.azure.com/hybrid-technologies-solutions/CQELight_CI/_apis/build/status/CQELight-CI?branchName=develop)](https://dev.azure.com/hybrid-technologies-solutions/CQELight_CI/_build/latest?definitionId=7&branchName=develop)
 [![Documentation Status](https://readthedocs.org/projects/cqelight/badge/?version=latest)](https://cqelight.readthedocs.io/en/latest/?badge=latest)
 
 ## Description 
-CQELight is a DDD, Command Query & Event Sourcing extensible and customisable base framework
+CQELight is an entreprise grade extensible and customisable framework for creating softwares with DDD, Command Query & Event Sourcing. 
 
 DDD, CQRS and Event-sourcing are great topics, but it's not always easy to get started with them. Here's where CQELight is.
 
@@ -12,6 +14,8 @@ CQELight allows you to do clean loosely coupled architecture for your software d
 
 Based on Domain Driven Design, you can create your objects within boundaries, as aggregates, entities or value objects.
 With this clean object architecture, you can perform simple, flexible and extensible CQRS operations for interact with the system.
+
+Moreover, CQELight bundle a bunch of tools used in all entreprise-grade projects such as IoC or Data Access Layer, among other things.
 
 Available packages : 
 

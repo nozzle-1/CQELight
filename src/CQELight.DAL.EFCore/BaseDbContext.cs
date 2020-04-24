@@ -1,13 +1,10 @@
 ﻿using CQELight.DAL.Attributes;
-using CQELight.DAL.Common;
 using CQELight.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
+using Microsoft.Extensions.Logging.Debug;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace CQELight.DAL.EFCore
 {
@@ -20,7 +17,7 @@ namespace CQELight.DAL.EFCore
 
         private readonly ILoggerFactory loggerFactory;
         private bool _useSchema;
-        private readonly EFCoreOptions efOptions;
+        private readonly EFCoreOptions? efOptions;
 
         #endregion
 
@@ -31,12 +28,13 @@ namespace CQELight.DAL.EFCore
         /// </summary>
         /// <param name="options">DbContext options.</param>
         public BaseDbContext(DbContextOptions options)
-            : this(options, null)
+            : base(options)
         {
+            loggerFactory = new LoggerFactory(new[] { new DebugLoggerProvider() });
         }
 
         /// <summary>
-        /// Create a new BaseDbContext with the specified connection to the database, and a logger factory fo all 
+        /// Create a new BaseDbContext with the specified connection to the database, and a logger factory fo all
         /// EF logs.
         /// </summary>
         /// <param name="options">DbContext options.</param>
@@ -68,9 +66,9 @@ namespace CQELight.DAL.EFCore
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             Assembly assembly = GetType().Assembly;
-            if(!string.IsNullOrWhiteSpace(efOptions?.ModelAssembly))
+            if (!string.IsNullOrWhiteSpace(efOptions?.ModelAssembly))
             {
-                assembly = Assembly.Load(new AssemblyName(efOptions.ModelAssembly));
+                assembly = Assembly.Load(new AssemblyName(efOptions!.ModelAssembly));
             }
             var entities = assembly.GetTypes().AsParallel()
                  .Where(t => typeof(IPersistableEntity).IsAssignableFrom(t)

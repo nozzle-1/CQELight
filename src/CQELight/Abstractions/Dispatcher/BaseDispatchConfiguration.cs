@@ -1,7 +1,6 @@
-﻿using CQELight.Abstractions.Events.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace CQELight.Abstractions.Dispatcher.Configuration
 {
@@ -15,16 +14,18 @@ namespace CQELight.Abstractions.Dispatcher.Configuration
         /// <summary>
         /// Instance of serializer.
         /// </summary>
-        public IDispatcherSerializer Serializer { get; set; }
+        public IDispatcherSerializer? Serializer { get; set; }
 
         /// <summary>
         /// Handler to fire if error.
         /// </summary>
-        public Action<Exception> ErrorHandler { get; set; }
+        public Action<Exception>? ErrorHandler { get; set; }
+
         /// <summary>
         /// Collection of buses types for dispatch.
         /// </summary>
-        public IEnumerable<Type> BusesTypes { get; set; }
+        public IEnumerable<Type> BusesTypes { get; set; } = Enumerable.Empty<Type>();
+
         /// <summary>
         /// Flag that indicates if object is security critical.
         /// </summary>

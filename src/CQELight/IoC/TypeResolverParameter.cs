@@ -1,7 +1,5 @@
 ﻿using CQELight.Abstractions.IoC.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.IoC
 {
@@ -19,7 +17,7 @@ namespace CQELight.IoC
         /// <summary>
         /// Value of parameter.
         /// </summary>
-        public object Value { get; }
+        public object? Value { get; }
 
         #endregion
 
@@ -30,7 +28,7 @@ namespace CQELight.IoC
         /// </summary>
         /// <param name="type">Type of parameter.</param>
         /// <param name="value">Value of parameter.</param>
-        public TypeResolverParameter(Type type, object value)
+        public TypeResolverParameter(Type type, object? value)
         {
             Value = value;
             Type = type ?? throw new ArgumentNullException(nameof(type));

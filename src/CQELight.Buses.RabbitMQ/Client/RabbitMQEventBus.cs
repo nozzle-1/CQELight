@@ -7,7 +7,6 @@ using CQELight.Abstractions.Dispatcher;
 using System;
 using System.Linq;
 using CQELight.Tools;
-using CQELight.Buses.RabbitMQ.Extensions;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using CQELight.Abstractions.DDD;
@@ -16,7 +15,7 @@ using Microsoft.Extensions.Logging.Debug;
 namespace CQELight.Buses.RabbitMQ.Client
 {
     /// <summary>
-    /// RabbitMQ client bus instance. 
+    /// RabbitMQ client bus instance.
     /// It uses its configuration to push to a RabbitMQ instance.
     /// </summary>
     [Obsolete("Use CQELight.Buses.RabbitMQ.Publisher.BaseRabbitMQPublisherBus instead")]
@@ -24,7 +23,7 @@ namespace CQELight.Buses.RabbitMQ.Client
     {
         #region Members
 
-        private static RabbitPublisherBusConfiguration  _configuration;
+        private static RabbitPublisherBusConfiguration _configuration = RabbitPublisherBusConfiguration.Default;
         private readonly IDispatcherSerializer _serializer;
         private readonly ILogger _logger;
 
@@ -40,17 +39,12 @@ namespace CQELight.Buses.RabbitMQ.Client
         /// <param name="loggerFactory">LoggerFactory</param>
         public RabbitMQEventBus(
             IDispatcherSerializer serializer,
-            RabbitPublisherBusConfiguration  configuration,
-            ILoggerFactory loggerFactory = null)
+            RabbitPublisherBusConfiguration configuration,
+            ILoggerFactory? loggerFactory = null)
         {
-            if (loggerFactory == null)
-            {
-                loggerFactory = new LoggerFactory();
-                loggerFactory.AddProvider(new DebugLoggerProvider());
-            }
-            _logger = loggerFactory.CreateLogger<RabbitMQEventBus>();
-            _configuration = configuration ?? RabbitPublisherBusConfiguration .Default;
-            _serializer = serializer ?? throw new System.ArgumentNullException(nameof(serializer));
+            _logger = (loggerFactory ?? new LoggerFactory(new[] { new DebugLoggerProvider() })).CreateLogger<RabbitMQEventBus>();
+            _configuration = configuration ?? RabbitPublisherBusConfiguration.Default;
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
         }
 
         #endregion
@@ -62,7 +56,7 @@ namespace CQELight.Buses.RabbitMQ.Client
         /// </summary>
         /// <param name="event">Event to register.</param>
         /// <param name="context">Context associated to the event.</param>
-        public async Task<Result> PublishEventAsync(IDomainEvent @event, IEventContext context = null)
+        public async Task<Result> PublishEventAsync(IDomainEvent @event, IEventContext? context = null)
         {
             if (@event != null)
             {
@@ -164,7 +158,7 @@ namespace CQELight.Buses.RabbitMQ.Client
             if (evtCfg.LifeTime.TotalMilliseconds > 0)
             {
                 expiration = evtCfg.LifeTime;
-                _logger.LogDebug(() => $"RabbitMQClientBus : Defining {evtCfg.LifeTime.ToString()} lifetime for event of type {eventType.FullName}");
+                _logger.LogDebug(() => $"RabbitMQClientBus : Defining {evtCfg.LifeTime} lifetime for event of type {eventType.FullName}");
             }
             var serializedEvent = _serializer.SerializeEvent(@event);
             if (expiration.HasValue)
@@ -172,7 +166,6 @@ namespace CQELight.Buses.RabbitMQ.Client
                 return new Enveloppe(serializedEvent, eventType, _configuration.Emiter, true, expiration.Value);
             }
             return new Enveloppe(serializedEvent, eventType, _configuration.Emiter);
-
         }
 
         private IBasicProperties GetBasicProperties(IModel channel, Enveloppe env)

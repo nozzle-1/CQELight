@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Buses.InMemory
 {
@@ -10,7 +8,6 @@ namespace CQELight.Buses.InMemory
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class CriticalHandlerAttribute : Attribute
-    { 
-
+    {
     }
 }

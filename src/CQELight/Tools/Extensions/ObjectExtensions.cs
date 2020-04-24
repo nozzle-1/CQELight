@@ -1,9 +1,6 @@
 ﻿using CQELight.Tools.Serialisation;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CQELight.Tools.Extensions
 {
@@ -70,7 +67,7 @@ namespace CQELight.Tools.Extensions
         /// <param name="value">Objet which we want Json.</param>
         /// <param name="settings">Custom JsonSerializerSettings</param>
         /// <returns>Json string if object is not null.</returns>
-        public static string ToJson(this object value, JsonSerializerSettings settings)
+        public static string ToJson(this object value, JsonSerializerSettings? settings)
         {
             if (value == null)
             {

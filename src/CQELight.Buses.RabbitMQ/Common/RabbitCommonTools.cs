@@ -3,10 +3,8 @@ using CQELight.Buses.RabbitMQ.Publisher;
 using CQELight.Buses.RabbitMQ.Subscriber;
 using CQELight.Tools.Extensions;
 using RabbitMQ.Client;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CQELight.Buses.RabbitMQ.Common
 {
@@ -24,7 +22,7 @@ namespace CQELight.Buses.RabbitMQ.Common
             }
 
             DeclareExchanges(channel, config.NetworkInfos.ServiceExchangeDescriptions.Concat(config.NetworkInfos.DistantExchangeDescriptions));
-            
+
             foreach (var queueDescription in config.NetworkInfos.ServiceQueueDescriptions)
             {
                 if (config.UseDeadLetterQueue && !queueDescription.AdditionnalProperties.ContainsKey(Consts.CONST_DEAD_LETTER_EXCHANGE_RABBIT_KEY))
@@ -76,7 +74,6 @@ namespace CQELight.Buses.RabbitMQ.Common
             {
                 channel.ExchangeDeclare(exchangeDescription);
             }
-
         }
     }
 }

@@ -1,16 +1,13 @@
-﻿using CQELight.Events.Serializers;
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CQELight.Buses.RabbitMQ.Server
 {
     /// <summary>
     /// Configuration class to setup RabbitMQ server behavior.
     /// </summary>
-    [Obsolete("Use ")]
+    // TODO remove in v2.
+    [Obsolete("Use RabbitConnectionInfos & RabbitNeworkInfos instead. Will be removed in v2")]
     public class RabbitMQServerConfiguration : AbstractBaseConfiguration
     {
         #region Static members

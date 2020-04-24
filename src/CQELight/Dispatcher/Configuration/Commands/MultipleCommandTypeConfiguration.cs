@@ -1,12 +1,9 @@
 ﻿using CQELight.Abstractions.CQS.Interfaces;
 using CQELight.Abstractions.Dispatcher.Configuration.Commands.Interfaces;
-using CQELight.Abstractions.Dispatcher.Configuration.Interfaces;
-using CQELight.Abstractions.Events.Interfaces;
 using CQELight.Tools.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CQELight.Dispatcher.Configuration.Commands
 {

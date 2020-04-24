@@ -2,12 +2,10 @@
 using CQELight.Abstractions.Events.Interfaces;
 using CQELight.Abstractions.IoC.Interfaces;
 using CQELight.Dispatcher;
-using CQELight.IoC;
 using CQELight.MVVM.Interfaces;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Debug;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using W = System.Windows.Input;
 
@@ -15,15 +13,15 @@ namespace CQELight.MVVM
 {
     /// <summary>
     /// Definition class for view models. A view model is an observable object that can notify view for changes.
-    /// It's also a IoC scope holder, a command context for dispatching, an event context for dispatching and 
+    /// It's also a IoC scope holder, a command context for dispatching, an event context for dispatching and
     /// is disposable.
     /// </summary>
     public abstract class BaseViewModel : ObservableObject, IScopeHolder, ICommandContext, IEventContext, IDisposable
     {
         #region Members
 
-        protected IScope _scope;
-        protected IView _view;
+        protected IScope? _scope;
+        protected IView? _view;
         protected ILogger _logger;
 
         #endregion
@@ -33,7 +31,7 @@ namespace CQELight.MVVM
         /// <summary>
         /// IoC Scope.
         /// </summary>
-        public IScope Scope => _scope;
+        public IScope? Scope => _scope;
 
         /// <summary>
         /// Command for cancel action.
@@ -45,7 +43,7 @@ namespace CQELight.MVVM
 
         #region Ctor
 
-        protected BaseViewModel(IScopeFactory scopeFactory = null)
+        protected BaseViewModel(IScopeFactory? scopeFactory = null)
         {
             if (scopeFactory != null)
             {
@@ -54,11 +52,11 @@ namespace CQELight.MVVM
             _logger =
                 _scope?.Resolve<ILoggerFactory>()?.CreateLogger(GetType().Name)
                 ??
-                new LoggerFactory().CreateLogger(GetType().Name);
+                new LoggerFactory(new[] { new DebugLoggerProvider() }).CreateLogger(GetType().Name);
             CoreDispatcher.AddHandlerToDispatcher(this);
         }
 
-        protected BaseViewModel(IView view, IScopeFactory scopeFactory = null)
+        protected BaseViewModel(IView view, IScopeFactory? scopeFactory = null)
             : this(scopeFactory)
         {
             _view = view;
@@ -72,7 +70,7 @@ namespace CQELight.MVVM
         /// Base method to cancel action.
         /// </summary>
         public virtual void Cancel()
-            => _view.Close();
+            => _view?.Close();
 
         /// <summary>
         /// Action to perform when view is loaded.
@@ -96,7 +94,6 @@ namespace CQELight.MVVM
         /// </summary>
         public virtual void Dispose()
         {
-
         }
 
         #endregion

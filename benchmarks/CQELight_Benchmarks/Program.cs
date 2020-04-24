@@ -1,18 +1,12 @@
 ﻿using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
-using CQELight;
-using CQELight.EventStore.EFCore.Common;
-using CQELight.EventStore.MongoDb;
 using CQELight.Tools.Extensions;
 using CQELight_Benchmarks.Benchmarks;
 using CQELight_Benchmarks.Benchmarks.Buses;
 using CQELight_Benchmarks.Benchmarks.DAL;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace CQELight_Benchmarks
 {

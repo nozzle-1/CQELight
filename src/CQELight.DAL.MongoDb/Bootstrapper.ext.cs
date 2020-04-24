@@ -7,15 +7,21 @@ using CQELight.Tools;
 using CQELight.Tools.Extensions;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Driver;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 
 namespace CQELight
 {
     public static class BootstrapperExtensions
     {
+        #region Private static members
+
+        private static bool s_MongoStaticInit;
+        private static readonly SemaphoreSlim s_ThreadSafety = new SemaphoreSlim(1);
+
+        #endregion
 
         #region Public static methods
 
@@ -27,28 +33,18 @@ namespace CQELight
             }
 
             var service = new MongoDbDALBootstrapperService
-            {
-                BootstrappAction = (ctx) =>
+            (ctx =>
                 {
-                    if (BsonSerializer.SerializerRegistry.GetSerializer<Type>() == null)
-                    {
-                        BsonSerializer.RegisterSerializer(typeof(Type), new TypeSerializer());
-                    }
-                    if (BsonSerializer.SerializerRegistry.GetSerializer<Guid>() == null)
-                    {
-                        BsonSerializer.RegisterSerializer(typeof(Guid), new GuidSerializer());
-                    }
+                    InitiMongoDbStaticStuff();
                     MongoDbContext.DatabaseName = options.DatabaseName;
                     MongoDbContext.MongoClient = new MongoDB.Driver.MongoClient(options.Url);
-
-                    var pack = new ConventionPack();
-                    pack.Add(new IgnoreExtraElementsConvention(true));
-                    ConventionRegistry.Register("CQELight conventions", pack, _ => true);
 
                     if (ctx.IsServiceRegistered(BootstrapperServiceType.IoC))
                     {
                         bootstrapper.AddIoCRegistration(new TypeRegistration<MongoDataReaderAdapter>(true));
                         bootstrapper.AddIoCRegistration(new TypeRegistration<MongoDataWriterAdapter>(true));
+
+                        bootstrapper.AddIoCRegistration(new InstanceTypeRegistration(MongoDbContext.MongoClient, RegistrationLifetime.Singleton, typeof(MongoClient)));
 
                         var entities = ReflectionTools.GetAllTypes()
                         .Where(t => typeof(IPersistableEntity).IsAssignableFrom(t)).ToList();
@@ -65,9 +61,40 @@ namespace CQELight
                         }
                     }
                 }
-            };
+            );
             bootstrapper.AddService(service);
             return bootstrapper;
+        }
+
+        #endregion
+
+        #region Private static methods
+
+        private static void InitiMongoDbStaticStuff()
+        {
+            if (!s_MongoStaticInit)
+            {
+                s_ThreadSafety.Wait();
+                try
+                {
+                    if (!s_MongoStaticInit)
+                    {
+                        BsonSerializer.RegisterSerializer(typeof(Type), new TypeSerializer());
+                        BsonSerializer.RegisterSerializer(typeof(Guid), new GuidSerializer());
+                        var pack = new ConventionPack
+                        {
+                            new IgnoreExtraElementsConvention(true)
+                        };
+                        ConventionRegistry.Register("CQELight conventions", pack, _ => true);
+
+                        s_MongoStaticInit = true;
+                    }
+                }
+                finally
+                {
+                    s_ThreadSafety.Release();
+                }
+            }
         }
 
         #endregion

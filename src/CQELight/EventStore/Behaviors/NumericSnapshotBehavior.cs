@@ -1,7 +1,6 @@
 ﻿using CQELight.Abstractions.DDD;
 using CQELight.Abstractions.Events.Interfaces;
 using CQELight.Abstractions.EventStore.Interfaces;
-using CQELight.Tools.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 

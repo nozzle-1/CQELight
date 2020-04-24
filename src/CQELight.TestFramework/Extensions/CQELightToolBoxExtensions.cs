@@ -1,8 +1,5 @@
 ﻿using CQELight.Tools;
-using System;
-using System.Collections.Generic;
 using CQELight.TestFramework.IoC;
-using System.Text;
 using Moq;
 using CQELight.Abstractions.Dispatcher.Interfaces;
 using CQELight.Abstractions.EventStore.Interfaces;
@@ -23,10 +20,10 @@ namespace CQELight.TestFramework.Extensions
         /// <param name="aggregateEventStoreMock">AggregateEventStore mock to use. If not defined, and empty one will be provided.</param>
         /// <returns></returns>
         public static CQELightToolbox GetTestToolbox(
-            TestScopeFactory scopeFactory = null,
-            Mock<IDispatcher> dispatcherMock = null,
-            Mock<IEventStore> eventStoreMock = null,
-            Mock<IAggregateEventStore> aggregateEventStoreMock = null)
+            TestScopeFactory? scopeFactory = null,
+            Mock<IDispatcher>? dispatcherMock = null,
+            Mock<IEventStore>? eventStoreMock = null,
+            Mock<IAggregateEventStore>? aggregateEventStoreMock = null)
             => new CQELightToolbox(
                     scopeFactory ?? new TestScopeFactory(),
                     dispatcherMock?.Object ?? new Mock<IDispatcher>().Object,

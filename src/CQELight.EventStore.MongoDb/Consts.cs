@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.EventStore.MongoDb
+﻿namespace CQELight.EventStore.MongoDb
 {
     internal static class Consts
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.Abstractions.Events.Interfaces
+﻿namespace CQELight.Abstractions.Events.Interfaces
 {
     /// <summary>
     /// Base contract interface for event context.

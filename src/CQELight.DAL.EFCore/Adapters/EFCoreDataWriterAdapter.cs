@@ -1,10 +1,7 @@
 ﻿using CQELight.Abstractions.DAL.Interfaces;
 using CQELight.DAL.Common;
 using CQELight.Tools;
-using CQELight.Tools.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CQELight.DAL.EFCore.Adapters
@@ -17,7 +14,7 @@ namespace CQELight.DAL.EFCore.Adapters
         #region Members
 
         private readonly BaseDbContext dbContext;
-        private readonly EFCoreOptions options;
+        private readonly EFCoreOptions? options;
 
         #endregion
 
@@ -30,7 +27,7 @@ namespace CQELight.DAL.EFCore.Adapters
         /// <param name="options">Custom EF Options to consider.</param>
         public EFCoreDataWriterAdapter(
             BaseDbContext dbContext,
-            EFCoreOptions options = null)
+            EFCoreOptions? options = null)
         {
             this.dbContext = dbContext;
             this.options = options;
@@ -48,21 +45,7 @@ namespace CQELight.DAL.EFCore.Adapters
 
         public Task UpdateAsync<T>(T entity) where T : class
         {
-            //bool CheckIfLogicalDeletionIsDisabled()
-            //{
-            //    return options?.DisableLogicalDeletion == true
-            //                    && entity.GetType().IsInHierarchySubClassOf(typeof(BasePersistableEntity))
-            //                    && (entity as BasePersistableEntity).Deleted
-            //                    && DateTime.UtcNow.Subtract((entity as BasePersistableEntity).DeletionDate ?? DateTime.MinValue).TotalSeconds < 10;
-            //}
-            //if (CheckIfLogicalDeletionIsDisabled())
-            //{
-            //    return DeleteAsync(entity, true);
-            //}
-            //else
-            //{
             dbContext.Update(entity);
-            //}
             return Task.CompletedTask;
         }
 

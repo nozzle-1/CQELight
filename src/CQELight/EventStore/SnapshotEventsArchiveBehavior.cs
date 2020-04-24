@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.EventStore
+﻿namespace CQELight.EventStore
 {
     /// <summary>
     /// Behavior to use when extracting events

@@ -1,14 +1,13 @@
 ﻿using CQELight.TestFramework;
-using MS = Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using FluentAssertions;
 using System.Linq;
 using CQELight.Abstractions.IoC.Interfaces;
 using CQELight.Bootstrapping.Notifications;
+using CQELight.IoC.Exceptions;
 
 namespace CQELight.IoC.Microsoft.Extensions.DependencyInjection.Tests
 {
@@ -36,7 +35,7 @@ namespace CQELight.IoC.Microsoft.Extensions.DependencyInjection.Tests
         }
 
         private Bootstrapper bootstrapper;
-        private IEnumerable<BootstrapperNotification> Bootstrapp(MS.IServiceCollection services)
+        private IEnumerable<BootstrapperNotification> Bootstrapp(IServiceCollection services)
             => bootstrapper.UseMicrosoftDependencyInjection(services).Bootstrapp();
 
         #endregion
@@ -398,5 +397,55 @@ namespace CQELight.IoC.Microsoft.Extensions.DependencyInjection.Tests
         }
         #endregion
 
+        #region ResolveRequired
+
+        [Fact]
+        public void ResolveRequired_Should_Throws_IfTypeIsNotRegistered()
+        {
+            var services = new ServiceCollection();
+            var scope = new MicrosoftScope(services.BuildServiceProvider().CreateScope(), services);
+            Assert.Throws<IoCResolutionException>(() => scope.ResolveRequired<ComplexClass>());
+            Assert.Throws<IoCResolutionException>(() => scope.ResolveRequired(typeof(ComplexClass)));
+        }
+
+        #endregion
+
+        #region IScopeFactory
+
+        [Fact]
+        public void ScopeFactory_Should_Be_Resolvable()
+        {
+            Bootstrapp(new ServiceCollection());
+
+            using (var s = DIManager.BeginScope())
+            {
+                var scopeFactory = s.Resolve<IScopeFactory>();
+                scopeFactory.Should().NotBeNull();
+                scopeFactory.Should().BeOfType<MicrosoftScopeFactory>();
+            }
+        }
+
+        #endregion
+
+        #region Bootstrapper
+
+        [Fact]
+        public void Bootstrapper_Should_Not_Register_AlreadyExistingServices()
+        {
+            var services = new ServiceCollection();
+            services.AddScoped<IScopeTest, ScopeTest>();
+            services.AddScoped<ScopeTest>();
+            var b = new Bootstrapper();
+            b.AddIoCRegistration(new TypeRegistration(typeof(ScopeTest), true));
+            b.UseMicrosoftDependencyInjection(services).Bootstrapp();
+
+            using (var scope = DIManager.BeginScope())
+            {
+                var s = scope.Resolve<IScopeTest>(); // will throw exception if registered twice
+                s.Should().NotBeNull();
+            }
+        }
+
+        #endregion
     }
 }

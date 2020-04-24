@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Buses
 {
@@ -9,7 +7,6 @@ namespace CQELight.Buses
     /// </summary>
     public struct EventLifeTimeConfiguration
     {
-
         #region Properties
 
         /// <summary>

@@ -1,7 +1,5 @@
 ﻿using CQELight.Abstractions.Dispatcher.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Dispatcher.Configuration.Internal
 {
@@ -16,6 +14,15 @@ namespace CQELight.Dispatcher.Configuration.Internal
         /// Type of command configuration is about.
         /// </summary>
         public Type CommandType { get; set; }
+
+        #endregion
+
+        #region Ctor
+
+        public CommandDispatchConfiguration(Type commandType)
+        {
+            CommandType = commandType ?? throw new ArgumentNullException(nameof(commandType));
+        }
 
         #endregion
 

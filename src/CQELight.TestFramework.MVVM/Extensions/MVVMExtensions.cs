@@ -1,8 +1,6 @@
 ﻿using CQELight.MVVM.Interfaces;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.TestFramework.Extensions
 {
@@ -11,7 +9,6 @@ namespace CQELight.TestFramework.Extensions
     /// </summary>
     public static class MVVMExtensions
     {
-
         #region MVVM
 
         /// <summary>
@@ -31,6 +28,5 @@ namespace CQELight.TestFramework.Extensions
         }
 
         #endregion
-
     }
 }

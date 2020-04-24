@@ -1,7 +1,5 @@
 ﻿using CQELight.Abstractions.DDD;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CQELight.Abstractions.Events.Interfaces
@@ -16,7 +14,7 @@ namespace CQELight.Abstractions.Events.Interfaces
         /// </summary>
         /// <param name="event">Event to register.</param>
         /// <param name="context">Context associated to the event..</param>
-        Task<Result> PublishEventAsync(IDomainEvent @event, IEventContext context = null);
+        Task<Result> PublishEventAsync(IDomainEvent @event, IEventContext? context = null);
         /// <summary>
         /// Public asynchronously a bunch of events to be processed by the bus.
         /// </summary>

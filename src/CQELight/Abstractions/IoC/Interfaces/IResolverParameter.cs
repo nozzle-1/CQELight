@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.Abstractions.IoC.Interfaces
+﻿namespace CQELight.Abstractions.IoC.Interfaces
 {
     /// <summary>
     /// Contract interface for parameters during a resolve operation.
@@ -12,6 +8,6 @@ namespace CQELight.Abstractions.IoC.Interfaces
         /// <summary>
         /// Gets the value of the parameter.
         /// </summary>
-        object Value { get; }
+        object? Value { get; }
     }
 }

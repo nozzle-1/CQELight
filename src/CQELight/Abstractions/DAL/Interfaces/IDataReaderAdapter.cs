@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CQELight.Abstractions.DAL.Interfaces
@@ -20,8 +19,8 @@ namespace CQELight.Abstractions.DAL.Interfaces
         /// <typeparam name="T">Type of entity to look for</typeparam>
         /// <returns>Bunch of entites that respects defined parameters.</returns>
         IAsyncEnumerable<T> GetAsync<T>(
-            Expression<Func<T, bool>> filter = null,
-            Expression<Func<T, object>> orderBy = null,
+            Expression<Func<T, bool>>? filter = null,
+            Expression<Func<T, object>>? orderBy = null,
             bool includeDeleted = false)
             where T : class;
 

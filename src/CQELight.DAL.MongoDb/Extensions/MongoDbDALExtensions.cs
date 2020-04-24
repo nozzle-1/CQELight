@@ -2,7 +2,6 @@
 using CQELight.DAL.Common;
 using CQELight.DAL.MongoDb.Mapping;
 using CQELight.Tools.Extensions;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Linq;
@@ -10,7 +9,7 @@ using System.Reflection;
 
 namespace CQELight.DAL.MongoDb.Extensions
 {
-    static class MongoDbDALExtensions
+    internal static class MongoDbDALExtensions
     {
         public static FilterDefinition<T> GetIdFilterFromIdValue<T>(this object idValue, Type entityType)
               where T : class

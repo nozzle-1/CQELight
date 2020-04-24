@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CQELight.Abstractions.DAL.Interfaces
@@ -29,7 +27,6 @@ namespace CQELight.Abstractions.DAL.Interfaces
         /// <param name="entity">Entity to delete</param>
         /// <param name="physicalDelettion">Flag that indicates if physical deletion should be applied</param>
         Task DeleteAsync<T>(T entity, bool physicalDelettion) where T : class;
-
 
     }
 }

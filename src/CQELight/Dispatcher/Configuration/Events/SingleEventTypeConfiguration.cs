@@ -1,12 +1,9 @@
 ﻿using CQELight.Abstractions.Dispatcher.Configuration.Interfaces;
 using CQELight.Abstractions.Events.Interfaces;
-using CQELight.Dispatcher.Configuration.Internal;
 using CQELight.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace CQELight.Dispatcher.Configuration.Events
 {
@@ -20,8 +17,8 @@ namespace CQELight.Dispatcher.Configuration.Events
         internal IList<Type> _busConfigs;
         internal Type _eventType;
         internal bool _isSecurityCritical;
-        internal Type _serializerType;
-        internal Action<Exception> _errorHandler;
+        internal Type? _serializerType;
+        internal Action<Exception>? _errorHandler;
 
         #endregion
 

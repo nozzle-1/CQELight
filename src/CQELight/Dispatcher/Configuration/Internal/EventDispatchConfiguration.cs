@@ -1,8 +1,5 @@
 ﻿using CQELight.Abstractions.Dispatcher.Configuration;
-using CQELight.Abstractions.Events.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CQELight.Dispatcher.Configuration.Internal
 {
@@ -20,5 +17,13 @@ namespace CQELight.Dispatcher.Configuration.Internal
 
         #endregion
 
+        #region Ctor
+
+        public EventDispatchConfiguration(Type eventType)
+        {
+            EventType = eventType ?? throw new ArgumentNullException(nameof(eventType));
+        }
+
+        #endregion
     }
 }

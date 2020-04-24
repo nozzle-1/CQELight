@@ -2,13 +2,9 @@
 using CQELight.Abstractions.Dispatcher;
 using CQELight.Abstractions.Dispatcher.Interfaces;
 using CQELight.Dispatcher;
-using CQELight.IoC.Autofac;
 using CQELight.TestFramework;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -69,6 +65,8 @@ namespace CQELight.MVVM.Integration.Tests
             await CoreDispatcher.DispatchMessageAsync(message).ConfigureAwait(false);
 
             TestViewModel.IsHandled.Should().BeTrue();
+
+            vm = null;
         }
 
         #endregion

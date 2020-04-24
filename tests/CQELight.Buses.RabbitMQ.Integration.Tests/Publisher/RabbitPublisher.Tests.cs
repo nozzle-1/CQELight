@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 using Moq;
 using RabbitMQ.Client;
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -96,7 +95,7 @@ namespace CQELight.Buses.RabbitMQ.Integration.Tests.Publisher
 
                 var result = channel.BasicGet("CQELight", true);
                 result.Should().NotBeNull();
-                Encoding.UTF8.GetString(result.Body).FromJson<TestCommand>().Should().NotBeNull();
+                Encoding.UTF8.GetString(result.Body.ToArray()).FromJson<TestCommand>().Should().NotBeNull();
             }
             finally
             {
@@ -132,7 +131,7 @@ namespace CQELight.Buses.RabbitMQ.Integration.Tests.Publisher
 
                 var result = channel.BasicGet("CQELight", true);
                 result.Should().NotBeNull();
-                Encoding.UTF8.GetString(result.Body).FromJson<TestCommand>().Should().NotBeNull();
+                Encoding.UTF8.GetString(result.Body.ToArray()).FromJson<TestCommand>().Should().NotBeNull();
             }
             finally
             {
@@ -165,7 +164,7 @@ namespace CQELight.Buses.RabbitMQ.Integration.Tests.Publisher
 
                 var result = channel.BasicGet("CQELight", true);
                 result.Should().NotBeNull();
-                Encoding.UTF8.GetString(result.Body).FromJson<TestCommand>().Should().NotBeNull();
+                Encoding.UTF8.GetString(result.Body.ToArray()).FromJson<TestCommand>().Should().NotBeNull();
             }
             finally
             {
@@ -202,7 +201,7 @@ namespace CQELight.Buses.RabbitMQ.Integration.Tests.Publisher
 
                 var result = channel.BasicGet("MyCustomQueue", true);
                 result.Should().NotBeNull();
-                Encoding.UTF8.GetString(result.Body).FromJson<TestCommand>().Should().NotBeNull();
+                Encoding.UTF8.GetString(result.Body.ToArray()).FromJson<TestCommand>().Should().NotBeNull();
             }
             finally
             {
@@ -249,7 +248,7 @@ namespace CQELight.Buses.RabbitMQ.Integration.Tests.Publisher
 
                 var result = channel.BasicGet("MyCustomQueue", true);
                 result.Should().NotBeNull();
-                Encoding.UTF8.GetString(result.Body).FromJson<TestEvent>().Should().NotBeNull();
+                Encoding.UTF8.GetString(result.Body.ToArray()).FromJson<TestEvent>().Should().NotBeNull();
             }
             finally
             {

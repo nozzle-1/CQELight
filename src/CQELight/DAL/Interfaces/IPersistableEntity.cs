@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CQELight.DAL.Interfaces
+﻿namespace CQELight.DAL.Interfaces
 {
     /// <summary>
     /// Base common interface for all kind of persitable entities.
     /// </summary>
     public interface IPersistableEntity
     {
-
         /// <summary>
-        /// Check if key is defined or not. 
+        /// Check if key is defined or not.
         /// Although this can be done by reflection, the choice
         /// to force to implement it is purely for performance.
         /// </summary>
@@ -24,6 +19,6 @@ namespace CQELight.DAL.Interfaces
         /// to force to implement it is purely for performance.
         /// </summary>
         /// <returns>Value of the key boxed in a object.</returns>
-        object GetKeyValue();
+        object? GetKeyValue();
     }
 }
