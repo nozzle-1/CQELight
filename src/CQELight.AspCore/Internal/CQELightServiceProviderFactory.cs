@@ -1,5 +1,6 @@
 ﻿using CQELight.Abstractions.IoC.Interfaces;
 using CQELight.IoC;
+using CQELight.Tools;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -37,6 +38,9 @@ namespace CQELight.AspCore.Internal
 
             bootstrapper.AddIoCRegistration(new TypeRegistration<CQELightServiceProvider>(true));
             bootstrapper.AddIoCRegistration(new TypeRegistration<CQELightServiceScopeFactory>(true));
+            bootstrapper.AddIoCRegistration(new TypeRegistration<CQELightServiceProvider>(typeof(IServiceProvider), typeof(ISupportRequiredService)));
+            bootstrapper.AddIoCRegistration(new TypeRegistration<CQELightServiceProviderFactory>(typeof(IServiceProviderFactory<IScopeFactory>)));
+            bootstrapper.AddIoCRegistration(new TypeRegistration<CQELightServiceScope>(typeof(IServiceScope)));
 
             foreach (var item in services)
             {
@@ -68,9 +72,9 @@ namespace CQELight.AspCore.Internal
             return DIManager._scopeFactory!;
         }
 
-        public IServiceProvider CreateServiceProvider(IScopeFactory containerBuilder)
+        public IServiceProvider CreateServiceProvider(IScopeFactory scopeFactory)
         {
-            return new CQELightServiceProvider(containerBuilder.CreateScope());
+            return new CQELightServiceProvider(scopeFactory.CreateScope());
         }
 
         #endregion

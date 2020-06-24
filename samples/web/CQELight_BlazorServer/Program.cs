@@ -23,6 +23,7 @@ namespace CQELight_BlazorServer
             Host.CreateDefaultBuilder(args)
                 .ConfigureCQELight(b =>
                 {
+                    b.UseAutofacAsIoC();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
