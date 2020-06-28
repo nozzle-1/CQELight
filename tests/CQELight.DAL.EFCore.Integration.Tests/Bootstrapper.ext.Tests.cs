@@ -5,6 +5,8 @@ using CQELight.IoC;
 using CQELight.TestFramework;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -190,6 +192,94 @@ namespace CQELight.DAL.EFCore.Integration.Tests
 
             notifs.Should().HaveCount(1);
             notifs.First().Type.Should().Be(BootstrapperNotificationType.Warning);
+        }
+
+        #endregion
+
+        #region DbContext
+
+        [Fact]
+        public void When_Bootstrapping_DbContext_Should_Be_Resolvable()
+        {
+            new Bootstrapper().UseEFCoreAsMainRepository(c => c.UseSqlite($"Filename={DbName}")).UseAutofacAsIoC().Bootstrapp();
+
+            using (var scope = DIManager.BeginScope())
+            {
+                scope.Resolve<DbContext>().Should().NotBeNull();
+            }
+        }
+
+        #endregion
+
+        #region Autofac
+
+        [Fact]
+        public async Task When_Using_AutoFac_As_IoC_Resolving_Should_Be_Working()
+        {
+            try
+            {
+                new Bootstrapper()
+                    .UseEFCoreAsMainRepository(c => c.UseSqlite($"Filename={DbName}"))
+                    .UseAutofacAsIoC()
+                    .Bootstrapp();
+
+                var scope = DIManager.BeginScope();
+                var repo = scope.Resolve<RepositoryBase>();
+
+                scope.Dispose();
+
+                var b = new WebSite
+                {
+                    Url = "http://www.microsoft.com"
+                };
+                repo.MarkForInsert(b); // It would throw if repo has been disposed
+                await repo.SaveAsync();
+
+            }
+            finally
+            {
+                using (var repo = DIManager.BeginScope().Resolve<RepositoryBase>())
+                {
+                    var websites = await repo.GetAsync<WebSite>().ToListAsync();
+                    websites.ForEach(w => repo.MarkForDelete(w, true));
+                    await repo.SaveAsync();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Microsoft DependencyInjection
+
+        [Fact]
+        public async Task When_Using_Microsoft_DI_As_IoC_Resolving_Should_Be_Working()
+        {
+            try
+            {
+                new Bootstrapper()
+                    .UseEFCoreAsMainRepository(c => c.UseSqlite($"Filename={DbName}"))
+                    .UseMicrosoftDependencyInjection(new ServiceCollection())
+                    .Bootstrapp();
+
+                var scope = DIManager.BeginScope();
+                var repo = scope.Resolve<RepositoryBase>();
+
+                var b = new WebSite
+                {
+                    Url = "http://www.microsoft.com"
+                };
+                repo.MarkForInsert(b); // Might throw on race condition if scope is disposed before this line
+                await repo.SaveAsync();
+            }
+            finally
+            {
+                using (var repo = DIManager.BeginScope().Resolve<RepositoryBase>())
+                {
+                    var websites = await repo.GetAsync<WebSite>().ToListAsync();
+                    websites.ForEach(w => repo.MarkForDelete(w, true));
+                    await repo.SaveAsync();
+                }
+            }
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿using CQELight.Abstractions.IoC.Interfaces;
 using CQELight.IoC;
+using CQELight.Tools;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -27,8 +28,19 @@ namespace CQELight.AspCore.Internal
 
         public IScopeFactory CreateBuilder(IServiceCollection services)
         {
+            RegistrationLifetime GetLifetimeFromServiceLifetime(ServiceLifetime lifetime)
+                => lifetime switch
+                {
+                    ServiceLifetime.Singleton => RegistrationLifetime.Singleton,
+                    ServiceLifetime.Scoped => RegistrationLifetime.Scoped,
+                    _ => RegistrationLifetime.Transient
+                };
+
             bootstrapper.AddIoCRegistration(new TypeRegistration<CQELightServiceProvider>(true));
             bootstrapper.AddIoCRegistration(new TypeRegistration<CQELightServiceScopeFactory>(true));
+            bootstrapper.AddIoCRegistration(new TypeRegistration<CQELightServiceProvider>(typeof(IServiceProvider), typeof(ISupportRequiredService)));
+            bootstrapper.AddIoCRegistration(new TypeRegistration<CQELightServiceProviderFactory>(typeof(IServiceProviderFactory<IScopeFactory>)));
+            bootstrapper.AddIoCRegistration(new TypeRegistration<CQELightServiceScope>(typeof(IServiceScope)));
 
             foreach (var item in services)
             {
@@ -36,18 +48,19 @@ namespace CQELight.AspCore.Internal
                 {
                     if (item.ImplementationType != null)
                     {
-                        bootstrapper.AddIoCRegistration(new TypeRegistration(item.ImplementationType,
-                            item.Lifetime == ServiceLifetime.Singleton ? RegistrationLifetime.Singleton : RegistrationLifetime.Transient,
+                        bootstrapper.AddIoCRegistration(new TypeRegistration(
+                            item.ImplementationType,
+                            GetLifetimeFromServiceLifetime(item.Lifetime),
                             TypeResolutionMode.OnlyUsePublicCtors, item.ServiceType));
                     }
                     else if (item.ImplementationFactory != null)
                     {
                         bootstrapper.AddIoCRegistration(new FactoryRegistration(s => item.ImplementationFactory(
-                            new CQELightServiceProvider(s.ResolveRequired<IScopeFactory>())), item.ServiceType));
+                            new CQELightServiceProvider(s.ResolveRequired<IScopeFactory>().CreateScope())), GetLifetimeFromServiceLifetime(item.Lifetime), item.ServiceType));
                     }
                     else if (item.ImplementationInstance != null)
                     {
-                        bootstrapper.AddIoCRegistration(new InstanceTypeRegistration(item.ImplementationInstance, item.ServiceType));
+                        bootstrapper.AddIoCRegistration(new InstanceTypeRegistration(item.ImplementationInstance, GetLifetimeFromServiceLifetime(item.Lifetime), item.ServiceType));
                     }
                 }
             }
@@ -56,12 +69,12 @@ namespace CQELight.AspCore.Internal
                 bootstrapper.UseMicrosoftDependencyInjection(services);
             }
             bootstrapper.Bootstrapp();
-            return DIManager._scopeFactory;
+            return DIManager._scopeFactory!;
         }
 
-        public IServiceProvider CreateServiceProvider(IScopeFactory containerBuilder)
+        public IServiceProvider CreateServiceProvider(IScopeFactory scopeFactory)
         {
-            return new CQELightServiceProvider(containerBuilder);
+            return new CQELightServiceProvider(scopeFactory.CreateScope());
         }
 
         #endregion
