@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>1.1.0</Version>
+    <Version>1.2.2</Version>
     <Authors>Christophe Mommer</Authors>
     <Description>Implementation of CQELight EventStore abstractions with EF Core/SQLServer or SQLite</Description>
     <Copyright>Christophe Mommer, Hybrid Technologies Solutions</Copyright>

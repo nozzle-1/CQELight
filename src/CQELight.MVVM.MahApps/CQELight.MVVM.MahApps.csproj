@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net461;netcoreapp3.0</TargetFrameworks>
-    <Version>1.1.0</Version>
+    <Version>1.2.2</Version>
     <Authors>Christophe MOMMER</Authors>
     <Company>Hybrid Technologies Solutions</Company>
     <Description>Implementation of CQELight MVVM abstractions based on MahApps</Description>

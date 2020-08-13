@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
-    <Version>1.1.0</Version>
+    <Version>1.2.2</Version>
     <Authors>Christophe MOMMER</Authors>
     <Company>Hybrid Technologies Solutions</Company>
     <Description>MSMQ Provider to use CQELight with a MSMQ bus. This package has been deprecated and should not be used anymore.</Description>

@@ -8,7 +8,7 @@
   <PropertyGroup>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <Version>1.1.0</Version>
+    <Version>1.2.2</Version>
     <Authors>Christophe Mommer</Authors>
     <Company>Hybrid Technologies Solutions</Company>
     <Description>
