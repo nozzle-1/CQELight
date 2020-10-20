@@ -15,17 +15,17 @@ namespace CQELight.DAL.MongoDb.Mapping
 
         private readonly ILogger _logger;
         private readonly List<PropertyInfo> _properties;
-        private readonly List<IndexDetail> _indexes = new List<IndexDetail>();
+        internal readonly List<IndexDetail> _indexes = new List<IndexDetail>();
 
         #endregion
 
         #region Properties
 
         public Type EntityType { get; }
-        public string? CollectionName { get; private set; }
+        public string? CollectionName { get; internal set; }
         [Obsolete("Database must be configured to configuration level, not entity level")]
         public string? DatabaseName { get; private set; }
-        public string? IdProperty { get; private set; }
+        public string? IdProperty { get; internal set; }
         public IEnumerable<string>? IdProperties { get; internal set; }
         public IEnumerable<IndexDetail> Indexes => _indexes.AsEnumerable();
 

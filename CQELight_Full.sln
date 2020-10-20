@@ -135,6 +135,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CQELight_BlazorServer", "sa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CQELight.ASPCore.Tests", "tests\CQELight.ASPCore.Tests\CQELight.ASPCore.Tests.csproj", "{1EDD2F44-4CEC-4729-A617-0197BE167AFA}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{78FE565D-2921-4F77-BDCC-B57FB2AF3615}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1197,6 +1199,26 @@ Global
 		{1EDD2F44-4CEC-4729-A617-0197BE167AFA}.Release|x64.Build.0 = Release|Any CPU
 		{1EDD2F44-4CEC-4729-A617-0197BE167AFA}.Release|x86.ActiveCfg = Release|Any CPU
 		{1EDD2F44-4CEC-4729-A617-0197BE167AFA}.Release|x86.Build.0 = Release|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Debug|x64.Build.0 = Debug|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Debug|x86.Build.0 = Debug|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Release|iPhone.Build.0 = Release|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Release|x64.ActiveCfg = Release|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Release|x64.Build.0 = Release|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Release|x86.ActiveCfg = Release|Any CPU
+		{78FE565D-2921-4F77-BDCC-B57FB2AF3615}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

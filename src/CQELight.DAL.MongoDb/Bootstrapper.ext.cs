@@ -1,6 +1,7 @@
 ﻿using CQELight.DAL.Interfaces;
 using CQELight.DAL.MongoDb;
 using CQELight.DAL.MongoDb.Adapters;
+using CQELight.DAL.MongoDb.Mapping;
 using CQELight.DAL.MongoDb.Serializers;
 using CQELight.IoC;
 using CQELight.Tools;
@@ -25,7 +26,9 @@ namespace CQELight
 
         #region Public static methods
 
-        public static Bootstrapper UseMongoDbAsMainRepository(this Bootstrapper bootstrapper, MongoDbOptions options)
+        public static Bootstrapper UseMongoDbAsMainRepository(
+            this Bootstrapper bootstrapper,
+            MongoDbOptions options)
         {
             if (options == null)
             {

@@ -5,6 +5,7 @@ using CQELight.DAL.MongoDb.Mapping;
 using CQELight.Tools;
 using CQELight.Tools.Extensions;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Clusters;
 using System;
@@ -185,6 +186,16 @@ namespace CQELight.DAL.MongoDb.Adapters
             try
             {
                 await parallelSafety.WaitAsync();
+                var mapping = MongoDbMapper.GetMapping<T>();
+                if(!BsonClassMap.IsClassMapRegistered(typeof(T)))
+                {
+                    var map = new BsonClassMap(mapping.EntityType);
+                    if (!string.IsNullOrWhiteSpace(mapping.IdProperty))
+                    {
+                        map.SetIdMember(new BsonMemberMap(map, mapping.EntityType.GetAllProperties().First(p => p.Name == mapping.IdProperty)));
+                    }
+                    BsonClassMap.RegisterClassMap(map);
+                }
                 await GetCollection<T>(entity.GetType()).InsertOneAsync(entity).ConfigureAwait(false);
                 actions++;
             }

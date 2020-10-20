@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace CQELight.Tools
@@ -203,6 +204,21 @@ namespace CQELight.Tools
             }
             return s_AllTypes;
         }
+
+        /// <summary>
+        /// Retrieve a MemberInfo from an Expression.
+        /// </summary>
+        /// <typeparam name="T">Type of object</typeparam>
+        /// <param name="expression">Expression</param>
+        /// <returns>Related member info</returns>
+        public static MemberInfo? GetMemberInfo<T>(this Expression<T> expression) 
+            => expression.Body switch
+            {
+                MemberExpression m => m.Member,
+                UnaryExpression u when u.Operand is MemberExpression m => m.Member,
+                _ => null
+            };
+
         #endregion
 
         #region Private static methods

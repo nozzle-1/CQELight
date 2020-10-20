@@ -7,3 +7,4 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("CQELight.EventStore.MongoDb")]
 [assembly: InternalsVisibleTo("CQELight.EventStore.EFCore")]
 [assembly: InternalsVisibleTo("CQELight.AspCore")]
+[assembly: InternalsVisibleTo("CQELight.DAL.MongoDb")]
