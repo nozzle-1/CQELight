@@ -33,6 +33,9 @@ namespace CQELight.EventStore.EFCore
         /// DbContext options for archive behavior.
         /// </summary>
         public DbContextOptions<ArchiveEventStoreDbContext>? ArchiveDbContextOptions { get; }
+        /// <summary>
+        /// Flag that defines if non aggregate events should be persisted.
+        /// </summary>
         public bool ShouldPersistNonAggregateEvent { get; }
 
         #endregion
